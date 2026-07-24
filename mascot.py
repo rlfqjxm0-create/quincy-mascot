@@ -641,6 +641,351 @@ class PenSound:
         wm.waveOutClose(h)
 
 
+class PenGrainSound:
+    """펜 긋는 소리 — 지속 재생(연속 스크레이프) 방식.
+
+    긴 스크레이프 녹음(sustain.wav)이 있으면 그중 가장 고른 구간을 골라
+    이음매 없이 무한 반복한다(실제 연필 질감 그대로). 없으면 짧은 클립들을
+    진폭 평탄화해 만든 베드로 폴백한다.
+      · 짧은 획은 짧게, 긴 획은 길게 — 소리 길이가 손을 그대로 따라간다.
+      · 한 획이 '스으으윽' 하나로 이어진다(루프가 매끄러워 회전음 없음).
+      · 획마다 피치만 살짝 달리해 반복감을 줄이고, 시작 볼륨에 속도를 싣는다.
+
+    **페이드는 전부 샘플에 미리 구워 둔다.** 재생 중 waveOutSetVolume으로
+    줄이면 드라이버에 따라 볼륨이 핸들별이 아니라 전역으로 먹어서, 직전 획의
+    페이드아웃이 방금 시작한 다음 획까지 끌어내린다(빠른 연타에서 소리가
+    10%대로 씹히던 원인). 그래서 짧은 클립은 꼬리를 구워 두고 발사 후엔
+    손대지 않고, 루프는 페이드인 머리·페이드아웃 꼬리 버퍼를 따로 재생한다.
+    """
+
+    BED_S = 1.5            # 베드 최대 길이(초) — 길수록 반복 주기가 길어짐
+    XFADE_S = 0.04         # 이음매 크로스페이드(초)
+    HEAD_S = 0.12          # 루프 페이드인 머리(초) — 짧은 클립 밑에서 올라옴
+    TAIL_S = 0.13          # 루프 페이드아웃 꼬리(초)
+    SHORT_CAP = 0.26       # 짧은 클립 최대 길이(초) — 획보다 길게 남지 않게
+    SHORT_MAX = 0.16       # 이 시간 넘게 이어지면 루프로 전환(짧은 클립과 겹침)
+    MOVE_MIN = 4.0         # 획 시작 판정(px) — 마우스 이벤트로 재므로 낮게 잡는다
+
+    def __init__(self, folder, volume=30):
+        import wave
+        names = [f for f in sorted(os.listdir(folder)) if f.lower().endswith(".wav")]
+        longs = [f for f in names if "sustain" in f.lower() or "long" in f.lower()]
+        self.fr = 44100
+
+        def read(fname):
+            with wave.open(os.path.join(folder, fname), "rb") as w:
+                if w.getsampwidth() != 2 or w.getnchannels() != 1:
+                    raise ValueError("펜 소리는 16bit 모노 wav만 지원")
+                self.fr = w.getframerate()
+                return list(memoryview(bytearray(w.readframes(w.getnframes()))).cast("h"))
+
+        if longs:                                     # 실제 긴 스크레이프 → 그대로 루프
+            flat = self._steady_bed(read(longs[0]))
+        else:                                         # 짧은 클립 → 평탄화 베드(폴백)
+            pcm = []
+            for f in ([c for c in names if c.lower().startswith("clip")] or names):
+                pcm += read(f)
+            flat = self._voiced_flat(pcm)
+        m = len(flat)
+        X = max(4, int(self.fr * self.XFADE_S))
+        Lb = min(m - X, int(self.fr * self.BED_S))
+        if Lb < 8:
+            raise ValueError("펜 소리가 너무 짧아 베드를 못 만듦")
+        # 크로스페이드 루프: loop[Lb-1] → loop[0] 이 매끄럽게 맞물리게
+        loop = (ctypes.c_int16 * Lb)()
+        for i in range(Lb):
+            if i < X:
+                w = i / X
+                loop[i] = int(flat[i] * w + flat[Lb + i] * (1.0 - w))
+            else:
+                loop[i] = flat[i]
+        self.loop_pcm = bytes(loop)
+        # 루프 머리(페이드인)·꼬리(페이드아웃) — 볼륨 API 대신 이걸 재생한다.
+        H = min(Lb, max(8, int(self.fr * self.HEAD_S)))
+        head = (ctypes.c_int16 * H)()
+        for i in range(H):
+            head[i] = int(loop[i] * (i / H))
+        self._head_pcm = bytes(head)
+        T = min(Lb, max(8, int(self.fr * self.TAIL_S)))
+        rise = max(2, int(self.fr * 0.003))       # 이음매 클릭 방지용 3ms 상승
+        tail = (ctypes.c_int16 * T)()
+        for i in range(T):
+            g = (1.0 - i / T) * (min(i, rise) / rise)
+            tail[i] = int(loop[i] * g)
+        self._tail_pcm = bytes(tail)
+        # 짧은 획용: clip_*.wav 를 원샷 재생. 길이를 SHORT_CAP으로 자르고 끝에
+        # 페이드 꼬리를 구워 둔다 — 재생 뒤엔 손대지 않아도 획 길이에 맞는다.
+        self.shorts = []
+        for f in [c for c in names if c.lower().startswith("clip")]:
+            with wave.open(os.path.join(folder, f), "rb") as w:
+                if w.getsampwidth() != 2 or w.getnchannels() != 1:
+                    continue
+                s = list(memoryview(bytearray(
+                    w.readframes(w.getnframes()))).cast("h"))
+            cap = int(self.fr * self.SHORT_CAP)
+            if len(s) > cap:
+                s = s[:cap]
+            fo = max(4, int(self.fr * 0.05))      # 끝 50ms 페이드아웃
+            if len(s) > fo:
+                for i in range(fo):
+                    s[len(s) - fo + i] = int(s[len(s) - fo + i] * (1.0 - i / fo))
+            arr = (ctypes.c_int16 * len(s))(*s)
+            self.shorts.append(bytes(arr))
+        self.shorts.sort(key=len)
+        self.set_volume(volume)
+        self._voice = None               # 루프 재생 (handle, WAVEHDR, buf)
+        self._playing = False            # 루프 재생 중인가
+        self._down = False               # 펜이 눌려 있는가 (마우스 콜백이 갱신)
+        self._stroke_dist = 0.0          # 이번 획에서 누적 이동(px)
+        self._stroke_fired = False       # 이번 획에서 짧은 소리를 냈는가
+        self._stroke_t = 0.0             # 짧은 소리를 낸 시각(루프 전환 기준)
+        self._moving_t = 0.0             # 마지막으로 실제 움직인 시각
+        self._cur_speed = 0.0            # 최근 이동 속도(클립 선택·볼륨용)
+        self._last_xy = None             # 직전 마우스 이벤트 좌표
+        self._last_ev = 0.0              # 직전 마우스 이벤트 시각
+        self._last_pick = -1             # 직전에 고른 클립 (연속 반복 방지)
+        self._oneshots = []              # 재생 중인 원샷들 [(h, hdr, buf)]
+        self._loop_bufs = {}             # 볼륨별 루프 버퍼 캐시 (매번 만들면 느리다)
+        self._loop_gain = 0.5            # 현재 루프의 볼륨 (꼬리를 같은 크기로)
+        self._loop_fr = self.fr          # 현재 루프의 재생 주파수 (꼬리도 같게)
+
+    def _win_rms(self, src, win):
+        return [(sum(src[i + j] * src[i + j] for j in range(win)) / win) ** 0.5
+                for i in range(0, len(src) - win, win)]
+
+    def _steady_bed(self, src):
+        """긴 녹음에서 가장 고른 구간을 골라 큰 기복만 살짝 다듬는다.
+        실제 스크레이프 질감은 최대한 남긴다(평탄화 약하게)."""
+        fr = self.fr
+        win = max(8, int(fr * 0.02))
+        need = min(len(src) - 1, int(fr * self.BED_S) + int(fr * self.XFADE_S))
+        rms = self._win_rms(src, win)
+        wc = max(1, need // win)
+        best = (1e18, 0)
+        for s in range(0, max(1, len(rms) - wc)):     # RMS 변동이 가장 작은 창
+            seg = rms[s:s + wc]
+            mean = sum(seg) / len(seg)
+            var = sum((r - mean) ** 2 for r in seg) / len(seg)
+            cv = var ** 0.5 / (mean + 1e-9)
+            if cv < best[0]:
+                best = (cv, s * win)
+        s0 = best[1]
+        seg = src[s0:s0 + need]
+        peak = max(1.0, max(abs(v) for v in seg))
+        target, floor = 0.6 * peak, 0.45 * peak       # 약한 평탄화(±완만)
+        out = []
+        for i in range(0, len(seg) - win + 1, win):
+            w2 = seg[i:i + win]
+            r = (sum(v * v for v in w2) / win) ** 0.5
+            g = min(1.8, target / max(r, floor))
+            out.extend(max(-32767, min(32767, int(v * g))) for v in w2)
+        return out
+
+    def _voiced_flat(self, src):
+        """짧은 클립용 폴백 — 소리 나는 창만 모아 강하게 평탄화한다."""
+        win = max(8, int(self.fr * 0.012))
+        rms = [(i, r) for i, r in
+               zip(range(0, len(src) - win, win), self._win_rms(src, win))]
+        if not rms:
+            raise ValueError("펜 소리가 너무 짧음")
+        peak = max(r for _, r in rms) or 1.0
+        thr = 0.25
+        voiced = [i for i, r in rms if r >= thr * peak]
+        while len(voiced) * win < self.fr * 0.25 and thr > 0.05:
+            thr -= 0.05
+            voiced = [i for i, r in rms if r >= thr * peak]
+        target, floor = 0.5 * peak, 0.30 * peak
+        out = []
+        for i in voiced:
+            seg = src[i:i + win]
+            r = (sum(v * v for v in seg) / win) ** 0.5
+            g = target / max(r, floor)
+            out.extend(max(-32767, min(32767, int(v * g))) for v in seg)
+        return out
+
+    def set_volume(self, volume):
+        self.volume = max(0.0, min(float(volume), 100.0))
+
+    # ── 마우스 콜백에서 즉시 호출 (그리기 루프를 기다리지 않는다) ──────────
+    # 펜 소리가 그리기 루프에 묶여 있으면 프레임 간격(33~66ms)만큼 늦게 난다.
+    # 타자 소리처럼 입력 이벤트에서 바로 재생해야 '댄 순간' 느낌이 난다.
+
+    def pen_down(self, x, y, now):
+        """펜을 댄 순간 — 새 획 시작 (소리는 아직, 움직임을 봐야 탭과 구분된다)."""
+        self._down = True
+        self._stroke_dist = 0.0
+        self._stroke_fired = False
+        self._last_xy = (x, y)
+        self._last_ev = now
+
+    def pen_move(self, x, y, now):
+        """마우스가 움직일 때마다 — MOVE_MIN을 넘는 즉시 짧은 클립을 낸다."""
+        if self._last_xy is not None:
+            d = math.hypot(x - self._last_xy[0], y - self._last_xy[1])
+            dt = now - self._last_ev
+            if 0 < dt < 0.5:
+                sp = d / dt
+                self._cur_speed += (sp - self._cur_speed) * 0.5   # 살짝 평활
+            if d > 0.5:
+                self._moving_t = now
+            if self._down:
+                self._stroke_dist += d
+                if not self._stroke_fired and self._stroke_dist >= self.MOVE_MIN:
+                    self._stroke_fired = True
+                    self._stroke_t = now
+                    if self.volume > 0.0:
+                        self._play_short(self._cur_speed)
+        self._last_xy = (x, y)
+        self._last_ev = now
+
+    def pen_up(self, now):
+        """펜을 뗀 순간 — 루프를 꼬리와 함께 끝낸다.
+
+        짧은 클립은 이미 꼬리가 구워져 있어 건드리지 않는다. 여기서 볼륨을
+        건드리면 다음 획의 소리까지 같이 줄어든다(연타 씹힘의 원인).
+        """
+        self._down = False
+        self._stroke_fired = False
+        if self._playing:
+            self._stop_loop(tail=True)
+
+    # ── 그리기 루프에서 호출 (루프 전환·정리) ──────────────────────────────
+
+    def tick(self, now, enabled=True):
+        """프레임마다 호출 — 끝난 소리를 거두고 긴 획이면 루프로 넘어간다."""
+        self._reap()
+        want = (enabled and self._down and self._stroke_fired
+                and now - self._moving_t < 0.18
+                and now - self._stroke_t > self.SHORT_MAX)
+        if want and not self._playing and self.volume > 0.0:
+            self._start()
+        elif self._playing and not want:
+            self._stop_loop(tail=True)
+
+    def _pick_short(self, speed):
+        """속도에 맞는 클립 고르기 — 빠르면 짧고 경쾌한 것, 느리면 긴 것.
+        (shorts는 길이순 정렬) 직전과 같은 것은 피해 반복감을 줄인다."""
+        n = len(self.shorts)
+        half = max(1, n // 2)
+        pool = range(0, half) if speed >= 350.0 else range(n - half, n)
+        cand = [i for i in pool if i != self._last_pick] or list(pool)
+        i = random.choice(cand)
+        self._last_pick = i
+        return self.shorts[i]
+
+    def _oneshot(self, pcm, gain, fr2):
+        """버퍼 하나를 독립 장치로 재생하고 목록에 넣는다 (볼륨은 샘플에 반영)."""
+        buf = _scaled_buffer(pcm, gain, 2)
+        wfx = _WAVEFORMATEX(1, 1, fr2, fr2 * 2, 2, 16, 0)
+        wm = ctypes.windll.winmm
+        h = ctypes.c_void_p()
+        if wm.waveOutOpen(ctypes.byref(h), 0xFFFFFFFF, ctypes.byref(wfx), 0, 0, 0):
+            return
+        wm.waveOutSetVolume(h, 0xFFFFFFFF)   # 장치 볼륨은 만땅 고정 — 이후 안 건드린다
+        hdr = _WAVEHDR()
+        hdr.lpData = ctypes.cast(buf, ctypes.c_void_p)
+        hdr.dwBufferLength = len(pcm)
+        wm.waveOutPrepareHeader(h, ctypes.byref(hdr), ctypes.sizeof(_WAVEHDR))
+        wm.waveOutWrite(h, ctypes.byref(hdr), ctypes.sizeof(_WAVEHDR))
+        self._oneshots.append((h, hdr, buf))
+
+    def _play_short(self, speed):
+        """짧은 클립 하나를 즉시 재생. 꼬리가 구워져 있어 뒤처리가 필요 없다."""
+        if not self.shorts:
+            return
+        g = max(0.0, min(1.0, (speed - 30.0) / 500.0))
+        gain = (self.volume / 100.0) * (0.7 + 0.3 * g)
+        fr2 = max(8000, int(self.fr * random.uniform(0.97, 1.06)))
+        self._oneshot(self._pick_short(speed), gain, fr2)
+
+    def _reap(self):
+        """끝난 원샷(짧은 클립·루프 꼬리)을 회수한다."""
+        if not self._oneshots:
+            return
+        wm = ctypes.windll.winmm
+        keep = []
+        for h, hdr, buf in self._oneshots:
+            if hdr.dwFlags & 0x00000001:        # WHDR_DONE
+                wm.waveOutUnprepareHeader(h, ctypes.byref(hdr), ctypes.sizeof(_WAVEHDR))
+                wm.waveOutClose(h)
+            else:
+                keep.append((h, hdr, buf))
+        self._oneshots = keep
+
+    def _loop_buf(self, gain):
+        """볼륨별 루프 본체 버퍼 (1.5초짜리라 매번 만들면 프레임을 잡아먹는다)."""
+        key = round(gain, 2)
+        buf = self._loop_bufs.get(key)
+        if buf is None:
+            if len(self._loop_bufs) > 8:
+                self._loop_bufs.clear()
+            buf = _scaled_buffer(self.loop_pcm, key, 2)
+            self._loop_bufs[key] = buf
+        return buf
+
+    def _start(self):
+        """루프 시작 — 페이드인이 구워진 머리를 먼저, 이어서 본체를 무한 반복."""
+        g = max(0.0, min(1.0, (self._cur_speed - 30.0) / 500.0))   # 속도 0~1
+        gain = (self.volume / 100.0) * (0.6 + 0.4 * g)
+        self._loop_gain = gain
+        fr2 = max(8000, int(self.fr * random.uniform(0.95, 1.08)))  # 획마다 피치만
+        self._loop_fr = fr2
+        wfx = _WAVEFORMATEX(1, 1, fr2, fr2 * 2, 2, 16, 0)
+        wm = ctypes.windll.winmm
+        h = ctypes.c_void_p()
+        if wm.waveOutOpen(ctypes.byref(h), 0xFFFFFFFF, ctypes.byref(wfx), 0, 0, 0):
+            return
+        wm.waveOutSetVolume(h, 0xFFFFFFFF)     # 만땅 고정 — 페이드는 샘플에 있다
+        head_buf = _scaled_buffer(self._head_pcm, gain, 2)
+        hh = _WAVEHDR()                         # 1) 페이드인 머리 (한 번)
+        hh.lpData = ctypes.cast(head_buf, ctypes.c_void_p)
+        hh.dwBufferLength = len(self._head_pcm)
+        wm.waveOutPrepareHeader(h, ctypes.byref(hh), ctypes.sizeof(_WAVEHDR))
+        wm.waveOutWrite(h, ctypes.byref(hh), ctypes.sizeof(_WAVEHDR))
+        body_buf = self._loop_buf(gain)
+        hb = _WAVEHDR()                         # 2) 본체 (멈출 때까지 무한 반복)
+        hb.lpData = ctypes.cast(body_buf, ctypes.c_void_p)
+        hb.dwBufferLength = len(self.loop_pcm)
+        hb.dwFlags = 0x00000004 | 0x00000008    # WHDR_BEGINLOOP | WHDR_ENDLOOP
+        hb.dwLoops = 0xFFFFFFFF
+        wm.waveOutPrepareHeader(h, ctypes.byref(hb), ctypes.sizeof(_WAVEHDR))
+        wm.waveOutWrite(h, ctypes.byref(hb), ctypes.sizeof(_WAVEHDR))
+        self._voice = (h, hh, hb, head_buf, body_buf)
+        self._playing = True
+
+    def _stop_loop(self, tail=True):
+        """루프를 멈춘다. tail이면 페이드아웃 꼬리를 따로 재생해 부드럽게 끝낸다."""
+        if self._voice is None:
+            self._playing = False
+            return
+        wm = ctypes.windll.winmm
+        h, hh, hb, _hbuf, _bbuf = self._voice
+        wm.waveOutReset(h)                      # 무한 반복 중단
+        for hdr in (hh, hb):
+            wm.waveOutUnprepareHeader(h, ctypes.byref(hdr), ctypes.sizeof(_WAVEHDR))
+        wm.waveOutClose(h)
+        self._voice = None
+        self._playing = False
+        if tail and self.volume > 0.0:          # 꼬리는 별도 장치 — 볼륨 간섭 없음
+            self._oneshot(self._tail_pcm, self._loop_gain, self._loop_fr)
+
+    def stop(self):
+        self._stop_loop(tail=False)
+
+    def close(self):
+        """캐릭터 종료 시 — 재생 중인 것을 전부 정리한다."""
+        self._stop_loop(tail=False)
+        wm = ctypes.windll.winmm
+        for h, hdr, _b in self._oneshots:
+            try:
+                wm.waveOutReset(h)
+                wm.waveOutUnprepareHeader(h, ctypes.byref(hdr), ctypes.sizeof(_WAVEHDR))
+                wm.waveOutClose(h)
+            except Exception:
+                pass
+        self._oneshots = []
+
+
 class _MacSoundPool:
     """macOS 소리 재생 — NSSound 사본을 돌려가며 겹쳐 재생한다.
 
@@ -898,33 +1243,83 @@ UPDATE_REPOS = {                 # 선물 캐릭터 자동 업데이트 배포 �
 UPDATE_FLAG = ".updated"          # 업데이트 알림 신호 파일
 
 
-def mark_updated(state_dir, restart):
-    """업데이트 사실을 남긴다. restart=True면 껐다 켜야 반영되는 경우."""
+def mark_updated(state_dir, restart, notes=None):
+    """업데이트 사실을 남긴다. restart=True면 껐다 켜야 반영되는 경우.
+
+    notes는 version.json에 실려 온 '이번에 바뀐 것' 목록(문자열 리스트).
+    """
     try:
+        items = [str(s).strip() for s in (notes or []) if str(s).strip()]
         with open(os.path.join(state_dir, UPDATE_FLAG), "w",
                   encoding="utf-8") as fp:
-            json.dump({"restart": bool(restart)}, fp)
+            json.dump({"restart": bool(restart), "notes": items[:6]}, fp,
+                      ensure_ascii=False)
     except Exception:
         pass
 
 
 def _take_update_flag(state_dir):
-    """신호를 읽고 지운다 — 한 번만 알리기 위해."""
+    """신호를 읽고 지운다 — 한 번만 알리기 위해. (말풍선 문구, 변경목록)."""
     p = os.path.join(state_dir, UPDATE_FLAG)
     if not os.path.exists(p):
-        return None
-    restart = False
+        return None, []
+    restart, notes = False, []
     try:
         with open(p, encoding="utf-8") as fp:
-            restart = bool(json.load(fp).get("restart"))
+            d = json.load(fp)
+        restart = bool(d.get("restart"))
+        notes = [str(s) for s in (d.get("notes") or []) if str(s).strip()]
     except Exception:
         pass
     try:
         os.remove(p)
     except Exception:
         pass
-    return ("업데이트 됐어요! 껐다 켜주세요" if restart
-            else "새 버전으로 업데이트 됐어요!")
+    msg = ("업데이트 됐어요! 껐다 켜주세요" if restart
+           else "새 버전으로 업데이트 됐어요!")
+    return msg, notes
+
+
+SEEN_FILE = ".seen_version"       # 마지막으로 알린 버전
+
+
+def update_notice(char_dir, state_dir):
+    """업데이트 직후인지 판단해 (말풍선 문구, 바뀐 점 목록)을 돌려준다.
+
+    런처(exe에 구워진 코드)가 남기는 .updated 신호를 먼저 본다. 다만 런처는
+    자동 업데이트 대상이 아니라서 옛 exe는 notes를 못 남긴다. 그래서
+    version.json의 버전 변화를 여기서 직접 본다 — mascot.py는 자동 업데이트로
+    갱신되므로, 친구에게 exe를 다시 보내지 않아도 이 경로는 동작한다.
+    """
+    msg, notes = _take_update_flag(state_dir)
+    ver, vnotes = None, []
+    try:
+        p = os.path.join(os.path.dirname(char_dir), "version.json")
+        with open(p, encoding="utf-8") as fp:
+            man = json.load(fp)
+        ver = man.get("version")
+        vnotes = [str(s) for s in (man.get("notes") or []) if str(s).strip()]
+    except Exception:
+        pass
+    if ver is None:
+        return msg, notes
+    seen_path = os.path.join(state_dir, SEEN_FILE)
+    seen = None
+    try:
+        with open(seen_path, encoding="utf-8") as fp:
+            seen = json.load(fp).get("version")
+    except Exception:
+        pass
+    if seen != ver:
+        try:
+            with open(seen_path, "w", encoding="utf-8") as fp:
+                json.dump({"version": ver}, fp)
+        except Exception:
+            pass
+        if seen is not None:          # 설치 후 첫 실행은 알릴 '변경'이 없다
+            msg = msg or "새 버전으로 업데이트 됐어요!"
+            notes = notes or vnotes
+    return msg, notes
 
 
 def _parts_broken(char_dir):
@@ -1013,7 +1408,8 @@ def repair_parts(char_dir, state_dir=None):
             json.dump(man, fp)
         if changed:
             # mascot.py는 이미 메모리에 올라와 있어 껐다 켜야 반영된다
-            mark_updated(state_dir or char_dir, "mascot.py" in changed)
+            mark_updated(state_dir or char_dir, "mascot.py" in changed,
+                         man.get("notes"))
     except Exception:
         pass                                # 오프라인이면 있는 그대로 실행
 
@@ -1327,7 +1723,9 @@ class Mascot:
         self._rec_prev_run = 0.0
         self._rec_armed = True       # 이번 집중 구간에서 아직 축하 안 함
         self._rec_next = 0.0         # 축하 쿨다운 (연달아 뜨지 않게)
-        self._update_msg = _take_update_flag(self.state_dir)
+        self._update_msg, self._update_notes = update_notice(self.dir,
+                                                             self.state_dir)
+        self._update_win = None      # 업데이트 안내 팝업 (한 번만)
         self.shadow_img_type = None  # 타자 자세용 그림자 (깃펜 없음)
         self._shadow_base = None
         self._shadow_typing = False
@@ -1400,8 +1798,6 @@ class Mascot:
             menu.add_command(label="시계 펼치기 / 접기", command=self._toggle_clock)
         if self.timer_on and self.ws_path is None:
             menu.add_command(label="타이머 초기화", command=self._timer_reset)
-        if self.ws_path is not None:
-            menu.add_command(label="기본 타이머로 전환", command=self.close)
         menu.add_separator()
         menu.add_command(label="종료", command=self.close)
         self.canvas.bind("<Button-3>", lambda e: menu.tk_popup(e.x_root, e.y_root))
@@ -1411,6 +1807,9 @@ class Mascot:
         self.pensnd = None
         self._pen_playing = False
         self._pen_release_t = None
+        # 그레인 펜 소리 — 획 감지·재생은 마우스 콜백(_on_click/_on_move)에서,
+        # 페이드 진행과 루프 전환은 그리기 루프의 tick()에서 한다.
+        self._pen_grain = False
         self.sound_packs = self._list_packs()
         self._init_sound()
 
@@ -1933,8 +2332,8 @@ class Mascot:
                 pass
             self.sndpack = None
         if self.pensnd is not None:
-            try:
-                self.pensnd.stop()
+            try:                            # 그레인은 close로 짧은 클립까지 회수
+                getattr(self.pensnd, "close", self.pensnd.stop)()
             except Exception:
                 pass
             self.pensnd = None
@@ -1954,11 +2353,18 @@ class Mascot:
             self.sndpack = None
         pen_dir = os.path.join(self.dir, "sounds", "pen")
         if os.path.isdir(pen_dir):
+            vol = float(self.us.get("pen_volume", 30))
+            # pen_grain(도로롱 전용): 알갱이 방식. 실패하면 원샷으로 폴백.
+            use_grain = bool(self.cfg.get("pen_grain")) and not IS_MAC
             try:
-                self.pensnd = PenSound(
-                    pen_dir, volume=float(self.us.get("pen_volume", 30)))
+                self.pensnd = (PenGrainSound(pen_dir, volume=vol) if use_grain
+                               else PenSound(pen_dir, volume=vol))
             except Exception:
-                self.pensnd = None
+                try:
+                    self.pensnd = PenSound(pen_dir, volume=vol)
+                except Exception:
+                    self.pensnd = None
+        self._pen_grain = isinstance(self.pensnd, PenGrainSound)
 
     # ── 입력 콜백 ─────────────────────────────────────────────────────────
     def _on_key(self, key):
@@ -2009,17 +2415,32 @@ class Mascot:
     def _on_key_release(self, key):
         self._held.discard(str(key))
 
-    def _on_click(self, _x, _y, _button, pressed):
+    def _on_click(self, x, y, _button, pressed):
         self.mouse_pressed = pressed
-        self.last_pointer = time.time()
+        now = time.time()
+        self.last_pointer = now
         if not pressed:
             self._new_stroke = True
+        # 펜 소리는 여기서 바로 판정한다 — 그리기 루프를 기다리면 늦다
+        if self._pen_grain and self.pensnd is not None:
+            try:
+                if pressed:
+                    self.pensnd.pen_down(x, y, now)
+                else:
+                    self.pensnd.pen_up(now)
+            except Exception:
+                pass
 
-    def _on_move(self, _x, _y):
+    def _on_move(self, x, y):
         now = time.time()
         self.last_pointer = now
         if self.mouse_pressed:
             self.last_drag = now
+        if self._pen_grain and self.pensnd is not None:
+            try:
+                self.pensnd.pen_move(x, y, now)
+            except Exception:
+                pass
 
     def _on_press(self, e):
         self._press = (e.x, e.y, e.x_root, e.y_root)
@@ -2505,6 +2926,8 @@ class Mascot:
             self._say(self._update_msg, 12.0)     # 업데이트 알림 (시작 후 한 번)
             self._update_msg = None
             self.next_talk = now + 120
+            if self._update_notes:                # 무엇이 바뀌었는지 팝업으로
+                self._safe("update_popup", self._show_update_popup)
         self._rec_tick(now, state)
         if (self.bubble is None and now >= self.next_talk
                 and not sleeping and now > self.celebrate_until):
@@ -2883,6 +3306,101 @@ class Mascot:
         py = min(max(self.root.winfo_rooty() - 20, 10), max(sh - H - 60, 10))
         win.geometry(f"+{int(px)}+{int(py)}")
 
+    def _show_update_popup(self):
+        """자동 업데이트로 무엇이 바뀌었는지 알려 주는 안내 창.
+
+        version.json의 notes를 그대로 보여 준다. 친구가 받는 쪽에서는 뭐가
+        달라졌는지 알 길이 없어서, 말풍선만으로는 안내가 부족했다.
+        """
+        notes = list(self._update_notes or [])
+        self._update_notes = []
+        if not notes or self._update_win is not None:
+            return
+        cd = self.card
+        W, PAD = 330, 20
+        head_h = 66
+        # 줄바꿈: 캔버스 폰트로 실제 폭을 재서 접는다
+        probe = tk.Canvas(self.root)
+        font = ("Malgun Gothic", 9)
+        inner = W - PAD * 2 - 46
+
+        def too_wide(s):
+            tid = probe.create_text(0, 0, text=s, font=font, anchor="w")
+            x0, _, x1, _ = probe.bbox(tid)
+            probe.delete(tid)
+            return x1 - x0 > inner
+
+        lines = []            # (텍스트, 첫줄여부) — 첫 줄에만 점을 찍는다
+        for note in notes:
+            cur, head = "", True
+            for word in str(note).split():
+                trial = (cur + " " + word).strip()
+                if cur and too_wide(trial):
+                    lines.append((cur, head))
+                    cur, head = word, False
+                else:
+                    cur = trial
+            if cur:
+                lines.append((cur, head))
+        probe.destroy()
+        if not lines:
+            self._update_win = None
+            return
+        body_h = 14 + 22 * len(lines) + 14
+        H = 20 + head_h + 16 + body_h + 20 + 40 + 20
+
+        win = tk.Toplevel(self.root)
+        self._update_win = win
+        win.title("업데이트")
+        win.attributes("-topmost", True)
+        win.resizable(False, False)
+        win.configure(bg=cd["panel"])
+        cv = tk.Canvas(win, width=W, height=H, bg=cd["panel"],
+                       highlightthickness=0)
+        cv.pack()
+
+        def rr(x0, y0, x1, y1, r, **kw):
+            pts = [x0 + r, y0, x1 - r, y0, x1, y0, x1, y0 + r, x1, y1 - r, x1, y1,
+                   x1 - r, y1, x0 + r, y1, x0, y1, x0, y1 - r, x0, y0 + r, x0, y0]
+            return cv.create_polygon(pts, smooth=True, **kw)
+
+        y = 20
+        rr(PAD, y, W - PAD, y + head_h, 16, fill=cd["soft"],
+           outline=cd["border"], width=2)
+        cv.create_text(W / 2, y + 24, text="새 버전으로 업데이트 됐어요",
+                       font=("Malgun Gothic", 11, "bold"), fill=cd["text"])
+        cv.create_text(W / 2, y + 46, text="이번에 바뀐 점이에요",
+                       font=("Malgun Gothic", 9), fill=cd["sub"])
+        y += head_h + 16
+
+        rr(PAD, y, W - PAD, y + body_h, 14, fill="#ffffff",
+           outline=cd["line"], width=1)
+        ly = y + 14 + 11
+        for text, is_first in lines:
+            if is_first:
+                cv.create_oval(PAD + 16, ly - 3, PAD + 22, ly + 3,
+                               fill=cd["fill"], outline="")
+            cv.create_text(PAD + 32, ly, anchor="w", text=text,
+                           font=font, fill=cd["text"])
+            ly += 22
+        y += body_h + 20
+
+        b = (PAD, y, W - PAD, y + 40)
+        rr(*b, 14, fill=cd["fill"], outline="")
+        cv.create_text(W / 2, y + 20, text="확인",
+                       font=("Malgun Gothic", 10, "bold"), fill="#ffffff")
+
+        def close(_e=None):
+            self._update_win = None
+            win.destroy()
+        cv.bind("<Button-1>", lambda e: close()
+                if b[0] <= e.x <= b[2] and b[1] <= e.y <= b[3] else None)
+        win.protocol("WM_DELETE_WINDOW", close)
+        win.update_idletasks()
+        sw, sh = win.winfo_screenwidth(), win.winfo_screenheight()
+        px = min(max(self.root.winfo_rootx() - 40, 10), max(sw - W - 10, 10))
+        py = min(max(self.root.winfo_rooty() - 20, 10), max(sh - H - 60, 10))
+        win.geometry(f"+{int(px)}+{int(py)}")
 
     def _draw_timer(self, state, sleeping, now):
         c = self.canvas
@@ -3230,6 +3748,8 @@ class Mascot:
     def _draw_arms(self, now, f, yo, pen_typing, cx, cy):
         """펜 추적 팔 또는 타이핑 팔 (환경 의존 코드가 많아 따로 격리)."""
         c = self.canvas
+        # (펜 소리의 획 감지·속도 측정은 마우스 콜백이 맡는다 — 그리기 루프에서
+        #  재면 프레임 간격만큼 늦어진다. 여기선 페이드 진행만 tick으로 돌린다.)
         # ── 오른손/오른팔: 펜 추적 또는 타이핑 파츠(어깨 축 회전) ────────
         if self.arm_pil is None or "arm_key" not in self.hop:
             return                      # 팔 파츠가 없으면 팔만 생략
@@ -3243,6 +3763,8 @@ class Mascot:
             c.create_image(tx_ + offx, ty_ + offy + bob,
                            image=self._rotated_hop("arm_right_typing", self.pen_ang),
                            anchor="nw")
+            if self._pen_grain and self.pensnd is not None:
+                self.pensnd.tick(now, enabled=False)    # 타이핑 중엔 펜 소리 정지
         else:
             if "pen" in f:
                 target = self._quad_xy(*f["pen"])
@@ -3281,9 +3803,13 @@ class Mascot:
             if not self.cfg.get("pen_over_head"):
                 self._draw_pen_hand()
             self._draw_left(now, f)
-            # 연필 사각거림: 스트로크마다 클립 한 번 (짧은/긴 선 동일)
+            # 연필 사각거림
             if self.pensnd is not None and "pen" not in f:
-                if drawing:
+                if self._pen_grain:
+                    # 획 감지·짧은 클립은 마우스 콜백에서 이미 즉시 처리됐다.
+                    # 여기서는 페이드 진행과 긴 획의 루프 전환만 맡는다.
+                    self.pensnd.tick(now, enabled="pen" not in f)
+                elif drawing:                     # 원샷: 스트로크마다 클립 한 번
                     self._pen_release_t = None
                     if not self._pen_playing:
                         self.pensnd.play()

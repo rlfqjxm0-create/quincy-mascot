@@ -1,7 +1,7 @@
 {
- "version": 1784826825,
+ "version": 1784928606,
  "files": {
-  "mascot.py": "da65b199dc0c4045733cf38b9441458c0152bb274ca9886a0fcc831065877d48",
+  "mascot.py": "2404386dbb65a43d9d99d5bf63878ace3302f9833e99fef22437256944811ca5",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -53,9 +53,12 @@
   "parts_quincy/sounds/mx-speed-silver/mx-speed-silver-4.wav": "26d49b823ecc46ce057aee649484f39cb13a4e242e72a20855c3a8bfad2581f8",
   "parts_quincy/sounds/mx-speed-silver/mx-speed-silver-5.wav": "c2fffe2e89be7f1239f95f7063bceddbef4d7c7730fe4aa94c88e34139f37b51",
   "parts_quincy/sounds/mx-speed-silver/mx-speed-silver-6.wav": "2b2dc0ababab084ebc7b9d62a8eaeaefa19c4af8d0bb67172fc486be7d277011",
-  "parts_quincy/sounds/pen/clip_1.wav": "470c5a7048d9fcbfd7c0874a8bf8ed40a7bb155cc94468779b8d3a11779b5bab",
-  "parts_quincy/sounds/pen/clip_2.wav": "1ced3e4dd195e23dfd3c4b4d60a51e178727db0b168eb25c03e3910def713107",
-  "parts_quincy/sounds/pen/clip_3.wav": "c64e63b791c1be84aee9f17deb933676eb0dcf32b8e413866c95c9668198976a",
+  "parts_quincy/sounds/pen/clip_1.wav": "aba157ef543fcecfaf25b91f4c2da91b85a09875291e01a0ff55a4fd787c3b46",
+  "parts_quincy/sounds/pen/clip_2.wav": "399b26f1cdc53d95916a967913f88ad34ade453dda08ddbc4bd137b09eb1fdd8",
+  "parts_quincy/sounds/pen/clip_3.wav": "2053da15a8eab5a95b697532233b3eff3ca6a8d9830c00637c110935581d476f",
+  "parts_quincy/sounds/pen/clip_4.wav": "943cc4b728bdb1bea1f0404e3000a710e4d73f9c0183b2efb606b5305e2fbd73",
+  "parts_quincy/sounds/pen/clip_5.wav": "52237409b942b76ba313bd20bb8b3222b40a8a87fd33f941c7fd2485b8aa35c8",
+  "parts_quincy/sounds/pen/clip_6.wav": "ffdb7c929f56e1f27bca1322413e3355497e013248727ccbe940965686b6144e",
   "parts_quincy/sounds/Razer Huntman TE - Revolt/config.json": "dd89574e8f02bf832a9fd0e77248a52f0f86fbc4aafca2abf3ea8c4b759fa0f1",
   "parts_quincy/sounds/Razer Huntman TE - Revolt/Razer huntman TE.wav": "a9d8bc23f71821e4cdb7212c37275d9f0fc66d9c285e55e13d6829b7f7b438e1",
   "parts_quincy/sounds/tealios-v2_Akira/back.wav": "72c5142e29793443f094aad7be3401059752bb956187b58e9c0e145a65937301",
@@ -73,5 +76,9 @@
   "parts_quincy/sounds/tealios-v2_Akira/shift.wav": "96ba5efe7c5b612c480d8f1193eeb8fc7a006208badac0a36c0858423b19c9ec",
   "parts_quincy/sounds/tealios-v2_Akira/space.wav": "b47b8e94ff0882a8793322ea6275d6447d9bc7f8de2a88791c9631d1164426ba",
   "parts_quincy/sounds/tealios-v2_Akira/tab.wav": "0718e9c5b1311b80d3337617d28667297eee897fa56d3d5a1174b94071fbcbf6"
- }
+ },
+ "notes": [
+  "펜 긋는 소리가 실제 연필 녹음으로 바뀌었어요",
+  "소리 종류가 3개에서 6개로 늘었어요"
+ ]
 }
