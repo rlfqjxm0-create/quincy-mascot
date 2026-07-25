@@ -1,7 +1,7 @@
 {
- "version": 1784928606,
+ "version": 1784946979,
  "files": {
-  "mascot.py": "2404386dbb65a43d9d99d5bf63878ace3302f9833e99fef22437256944811ca5",
+  "mascot.py": "57887ae453b2a4126fe5885c5833d2494b6cd9f62d0235e47040beeafc5c8a2e",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -78,7 +78,7 @@
   "parts_quincy/sounds/tealios-v2_Akira/tab.wav": "0718e9c5b1311b80d3337617d28667297eee897fa56d3d5a1174b94071fbcbf6"
  },
  "notes": [
-  "펜 긋는 소리가 실제 연필 녹음으로 바뀌었어요",
-  "소리 종류가 3개에서 6개로 늘었어요"
+  "할 일을 우클릭하면 수정·완료를 고를 수 있어요",
+  "완료하면 캐릭터가 축하해 줍니다"
  ]
 }
