@@ -1,5 +1,5 @@
 {
- "version": 1784955345,
+ "version": 1784964507,
  "files": {
   "mascot.py": "2e905a09bd1ed5f95ee720d7d631c4367c4acf69dd0a64a928ee017d162a9a98",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
@@ -7,7 +7,7 @@
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
   "parts_quincy/arm_right_typing.png": "53eb0e84e72d0ca0aa85e4abd388451663850938e2fc154abe54a59bd47691d0",
   "parts_quincy/body_open.png": "1538bcd1ff86576c80710b08f25f8d632c5ce4e653d732828f9cc79b2322c143",
-  "parts_quincy/config.json": "a2bb637a6c67b628a9a0483ac2a00629ab4da0f2f2a1254ca512d4372fb4d819",
+  "parts_quincy/config.json": "ab41ffb57ce0d1bca0967381f2427bb502c95edede8dbc759bdd0d43b2cf00a3",
   "parts_quincy/desk.png": "ef4d1403e5b887c76e75d4b035b728a1e63975526e3086b92b6eda3511f0e586",
   "parts_quincy/eyes_closed.png": "56021a81adb16d8c6ca0e872b7faf68624a6de6ce789950a6754d470c71eb967",
   "parts_quincy/hat.png": "4bd1da80b760cff3694c7b21350e8dce6a177026846dcd737d796ad7560f277f",
@@ -78,7 +78,7 @@
   "parts_quincy/sounds/tealios-v2_Akira/tab.wav": "0718e9c5b1311b80d3337617d28667297eee897fa56d3d5a1174b94071fbcbf6"
  },
  "notes": [
-  "할 일 우클릭이 가끔 설정 창을 열던 문제를 고쳤어요",
-  "크기를 줄여도 타이머 카드가 안 잘려요"
+  "혼잣말이 훨씬 다양해졌어요",
+  "무슨 말을 할지는 지켜봐 주세요"
  ]
 }
