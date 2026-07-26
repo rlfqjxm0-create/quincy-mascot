@@ -145,5 +145,6 @@
  "card_top": 44,
  "soft_inner": true,
  "todo": true,
- "records": true
+ "records": true,
+ "gestures": true
 }

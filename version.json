@@ -1,13 +1,13 @@
 {
- "version": 1785013734,
+ "version": 1785050498,
  "files": {
-  "mascot.py": "9a47691ccbc7dd08d878267c56c84ad054375f5207b753cf90fcf87ffb375b2f",
+  "mascot.py": "36162d4b1be12a7d4f3197ed78a1b684f5c067ad297ad6bdaae629f4c0eda806",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
   "parts_quincy/arm_right_typing.png": "53eb0e84e72d0ca0aa85e4abd388451663850938e2fc154abe54a59bd47691d0",
   "parts_quincy/body_open.png": "1538bcd1ff86576c80710b08f25f8d632c5ce4e653d732828f9cc79b2322c143",
-  "parts_quincy/config.json": "ab41ffb57ce0d1bca0967381f2427bb502c95edede8dbc759bdd0d43b2cf00a3",
+  "parts_quincy/config.json": "e5d0c1891f52ec48f7bce42e9dea8edc6fe611fbc1577619118b506dc57b3b25",
   "parts_quincy/desk.png": "ef4d1403e5b887c76e75d4b035b728a1e63975526e3086b92b6eda3511f0e586",
   "parts_quincy/eyes_closed.png": "56021a81adb16d8c6ca0e872b7faf68624a6de6ce789950a6754d470c71eb967",
   "parts_quincy/hat.png": "4bd1da80b760cff3694c7b21350e8dce6a177026846dcd737d796ad7560f277f",
@@ -79,7 +79,7 @@
   "parts_quincy/sounds/tealios-v2_Akira/tab.wav": "0718e9c5b1311b80d3337617d28667297eee897fa56d3d5a1174b94071fbcbf6"
  },
  "notes": [
-  "우클릭 메뉴·환경설정·작업 종료 화면의 글자가 화면 배율에 맞게 나옵니다.",
-  "할 일 목록 말풍선을 우클릭하면 '크기 조절'로 목록 크기를 바꿀 수 있습니다."
+  "캐릭터가 상황에 따라 움직입니다 — 인사, 박수, 기지개, 고개짓, 리듬 타기.",
+  "그리거나 타자 치는 중에도 동작이 끊기지 않습니다."
  ]
 }
