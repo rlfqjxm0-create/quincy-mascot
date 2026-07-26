@@ -146,5 +146,10 @@
  "soft_inner": true,
  "todo": true,
  "records": true,
- "gestures": true
+ "gestures": true,
+ "stretch_talk": [
+  "굳기 전에 펴 두는 게 좋군.",
+  "잠시 몸을 펴게.",
+  "어깨가 비명을 지르는군."
+ ]
 }

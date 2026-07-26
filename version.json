@@ -1,13 +1,13 @@
 {
- "version": 1785051539,
+ "version": 1785051841,
  "files": {
-  "mascot.py": "f9db50e3c82bb2c3521985b1e73235c2275f8b695ff4639c5a82eaf6daae8a9c",
+  "mascot.py": "37efeee5cfadde6413de6c3b02dd4dfb4f1adab0748e57f9b4e8753932129cd8",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
   "parts_quincy/arm_right_typing.png": "53eb0e84e72d0ca0aa85e4abd388451663850938e2fc154abe54a59bd47691d0",
   "parts_quincy/body_open.png": "1538bcd1ff86576c80710b08f25f8d632c5ce4e653d732828f9cc79b2322c143",
-  "parts_quincy/config.json": "e5d0c1891f52ec48f7bce42e9dea8edc6fe611fbc1577619118b506dc57b3b25",
+  "parts_quincy/config.json": "3566ba6cf0bcd96b77e7e2d98493c66ce89a8f713e7375c8f9e49598b09bcef6",
   "parts_quincy/desk.png": "ef4d1403e5b887c76e75d4b035b728a1e63975526e3086b92b6eda3511f0e586",
   "parts_quincy/eyes_closed.png": "56021a81adb16d8c6ca0e872b7faf68624a6de6ce789950a6754d470c71eb967",
   "parts_quincy/hat.png": "4bd1da80b760cff3694c7b21350e8dce6a177026846dcd737d796ad7560f277f",
@@ -79,6 +79,7 @@
   "parts_quincy/sounds/tealios-v2_Akira/tab.wav": "0718e9c5b1311b80d3337617d28667297eee897fa56d3d5a1174b94071fbcbf6"
  },
  "notes": [
+  "20분마다 기지개를 켜며 스트레칭을 권합니다.",
   "동작 중 문제가 생겨도 캐릭터가 멈추거나 사라지지 않도록 보완했습니다."
  ]
 }
