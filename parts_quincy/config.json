@@ -157,5 +157,12 @@
   "그래, 그거면 됐다.",
   "잘했군."
  ],
- "stretch_hint_suffix": " — 누르게"
+ "stretch_hint_suffix": " — 누르게",
+ "remember_pos": true,
+ "history": true,
+ "deadline_on": true,
+ "goal_cheer": true,
+ "save_card": true,
+ "soft_overlay": true,
+ "pen_monitor_pick": true
 }
