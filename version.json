@@ -1,13 +1,13 @@
 {
- "version": 1785446221,
+ "version": 1785447076,
  "files": {
-  "mascot.py": "fee8f7d0237e20a3ea45c05c09765c4e2e85229933f660974453d107413b4645",
+  "mascot.py": "6928bfd7feeb4d9567fb9b724e2bb91f0eb2f3ebd1198e24d5491683f7cbef87",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
   "parts_quincy/arm_right_typing.png": "53eb0e84e72d0ca0aa85e4abd388451663850938e2fc154abe54a59bd47691d0",
   "parts_quincy/body_open.png": "1538bcd1ff86576c80710b08f25f8d632c5ce4e653d732828f9cc79b2322c143",
-  "parts_quincy/config.json": "92a7ba0026260eb14581f3e7a1fc9a352654911c895c21f65b6b34bb992309d9",
+  "parts_quincy/config.json": "418f8de52d1bc42bd720428e262e2c93e3143dfbc58f5eeec8eed9fbbd9c4969",
   "parts_quincy/desk.png": "ef4d1403e5b887c76e75d4b035b728a1e63975526e3086b92b6eda3511f0e586",
   "parts_quincy/eyes_closed.png": "56021a81adb16d8c6ca0e872b7faf68624a6de6ce789950a6754d470c71eb967",
   "parts_quincy/hat.png": "4bd1da80b760cff3694c7b21350e8dce6a177026846dcd737d796ad7560f277f",
@@ -97,10 +97,7 @@
   "parts_quincy/sounds/tealios-v2_Akira/tab.wav": "0718e9c5b1311b80d3337617d28667297eee897fa56d3d5a1174b94071fbcbf6"
  },
  "notes": [
-  "마감을 말풍선으로 여러 개 등록할 수 있습니다. 우클릭 → 마감 추가.",
-  "작업 종료 브리핑에 어제·최근 7일·연속 일수가 나오고, 그림으로 저장할 수 있습니다.",
-  "목표 시간을 채우면 축하해 줍니다. 캐릭터 위치도 기억합니다.",
-  "눈·머리카락이 거칠게 보이던 문제를 고쳤습니다.",
-  "모니터가 여러 대면 펜을 따라갈 화면을 고를 수 있습니다."
+  "작업 종료 브리핑에 캐릭터 이름과 날짜가 표시됩니다.",
+  "어제 대비와 연속 일수가 잘못 세어지던 문제를 고쳤습니다."
  ]
 }
