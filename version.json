@@ -1,7 +1,7 @@
 {
- "version": 1785360421,
+ "version": 1785441316,
  "files": {
-  "mascot.py": "3bd32d6a673f18a88a0f1f90a6469478a5440cd723f15088c7fd708207a285ce",
+  "mascot.py": "33efd280638df313846b37a29e9987a183c4fa61cfbdc1af0c54ea55681730e2",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -97,7 +97,6 @@
   "parts_quincy/sounds/tealios-v2_Akira/tab.wav": "0718e9c5b1311b80d3337617d28667297eee897fa56d3d5a1174b94071fbcbf6"
  },
  "notes": [
-  "타자 소리 팩 'Razer Green'이 추가됐습니다.",
-  "환경설정의 소리 팩을 누르면 전체 목록이 펼쳐집니다."
+  "스트레칭 알림이 뜨지 않던 문제를 고쳤습니다."
  ]
 }
