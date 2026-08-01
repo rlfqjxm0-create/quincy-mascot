@@ -1,13 +1,13 @@
 {
- "version": 1785575489,
+ "version": 1785591661,
  "files": {
-  "mascot.py": "48ccf6cd106b4ed45e04d6322e5b5a4646ed98667430bcc91b7e426223b30909",
+  "mascot.py": "faa19b989baac6dcb363838ceae6d2bc0d0744980ca0047f6b6df02626eddf09",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
   "parts_quincy/arm_right_typing.png": "53eb0e84e72d0ca0aa85e4abd388451663850938e2fc154abe54a59bd47691d0",
   "parts_quincy/body_open.png": "1538bcd1ff86576c80710b08f25f8d632c5ce4e653d732828f9cc79b2322c143",
-  "parts_quincy/config.json": "60addf0d728b03c84d2433efc749d313365d72d25c21c91ddcc4d8a989725536",
+  "parts_quincy/config.json": "3179f249e7b6b007583cf97d18cc20afd4adbebcf9861ed84d34a4907fd283a8",
   "parts_quincy/desk.png": "ef4d1403e5b887c76e75d4b035b728a1e63975526e3086b92b6eda3511f0e586",
   "parts_quincy/eyes_closed.png": "56021a81adb16d8c6ca0e872b7faf68624a6de6ce789950a6754d470c71eb967",
   "parts_quincy/hat.png": "4bd1da80b760cff3694c7b21350e8dce6a177026846dcd737d796ad7560f277f",
@@ -97,6 +97,7 @@
   "parts_quincy/sounds/tealios-v2_Akira/tab.wav": "0718e9c5b1311b80d3337617d28667297eee897fa56d3d5a1174b94071fbcbf6"
  },
  "notes": [
-  "설정 창이 길어지면 스크롤로 볼 수 있어요. 저장 버튼은 늘 아래에 있습니다."
+  "모션이 추가되었어요.",
+  "움직일 때 선이 거칠어지던 것을 고쳤어요."
  ]
 }
