@@ -1,7 +1,7 @@
 {
- "version": 1786323553,
+ "version": 1786366814,
  "files": {
-  "mascot.py": "21967111484fc89e186c14f94a55bd5751f1505ac6eb4ae71d94df95f7a20fde",
+  "mascot.py": "151380212caa39faa7e53ddb99f4f661bd1f2d13196aa3e9014dab015b998882",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -171,6 +171,7 @@
   "parts_quincy/sounds/tealios-v2_Akira/space.wav": "b47b8e94ff0882a8793322ea6275d6447d9bc7f8de2a88791c9631d1164426ba",
   "parts_quincy/sounds/tealios-v2_Akira/tab.wav": "0718e9c5b1311b80d3337617d28667297eee897fa56d3d5a1174b94071fbcbf6"
  },
- "notes": [],
- "silent": true
+ "notes": [
+  "기록이 더 안전해졌어요\n저장하는 도중에 컴퓨터가 꺼져도(강제 종료·정전) 그동안의 작업 기록·할 일·설정이 사라지지 않습니다. 예전에는 그 순간에 꺼지면 통째로 비어 버릴 수 있었어요."
+ ]
 }
