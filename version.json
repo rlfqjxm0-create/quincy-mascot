@@ -1,7 +1,7 @@
 {
- "version": 1786588050,
+ "version": 1786599776,
  "files": {
-  "mascot.py": "41f39fdeec0009a8bf88390539499cdd15b2f147ac275930024bbc7a4f3d6484",
+  "mascot.py": "2ae523ed0d7b1807201142019d7457fdbc4825857128a73fcfea497e113017ef",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -201,10 +201,6 @@
   "parts_quincy/sounds/tealios-v2_Akira/space.wav": "b47b8e94ff0882a8793322ea6275d6447d9bc7f8de2a88791c9631d1164426ba",
   "parts_quincy/sounds/tealios-v2_Akira/tab.wav": "0718e9c5b1311b80d3337617d28667297eee897fa56d3d5a1174b94071fbcbf6"
  },
- "notes": [
-  "책상에 슬라임이 생겼어요\n책상을 누르면 키보드와 타블렛 위로 흰 매트가 깔리고 슬라임이 올라옵니다. 다시 누르면 치워져요.",
-  "두 손으로 만져요\n누르면 쑥 들어가고, 끌면 늘어났다가 놓으면 돌아옵니다. 만질 때마다 소리가 나요.",
-  "종류를 고를 수 있어요\n우클릭 → 슬라임에서 버터바와 치즈 중에 고릅니다. 색과 소리, 촉감이 다릅니다.",
-  "작업 중에도 만질 수 있어요\n그림 그리는 중에 눌러도 나옵니다. 한동안 안 만지면 저절로 치워져요."
- ]
+ "notes": [],
+ "silent": true
 }
