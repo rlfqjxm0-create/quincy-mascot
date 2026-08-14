@@ -1,7 +1,7 @@
 {
- "version": 1786694582,
+ "version": 1786695663,
  "files": {
-  "mascot.py": "6838fb310a9c276e9ec59dd160ed04e85b4064462b58a0c6a23237c6cc48507e",
+  "mascot.py": "7e6925a09b7253036500effef4bab583907b1f4e78bf929b813b09da53600f73",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -18,8 +18,11 @@
   "parts_quincy/pet2.png": "a628e6a2f124d20a9b9ecc36aeb504b33de6defe350651944b806505b2629bd3",
   "parts_quincy/pupils.png": "fdf903e635bf20b1099237877ac503b456e936c66096fb30a5fd89c4f9aaab4d",
   "parts_quincy/scarf.png": "8b8fa3df654f46b6aa49657c23ae0507dc2a82afd0e6024c001e9039b915ae6e",
-  "parts_quincy/seat.png": "6c24d35dd366a71ae73bfe96ff2bca2956ff51e3ff3550cdb67718b7e33ce7f2",
-  "parts_quincy/seat_idle.png": "5706128aea96c5c87ce4adfdffd9164c51a6ffa91d17de60867e0006f9aff866",
+  "parts_quincy/seat.png": "f13f01b01f43f57ed9fd649280495d5bf7638b925c82948ee790f6db9f18682c",
+  "parts_quincy/seat_idle.png": "16b9ad419a46f29bb69e766580a459df866edbc1a2bb439093d287c6ece5cc6d",
+  "parts_quincy/seat_pen.png": "3f1241fee924fedd4c14d04475647ae64273bd5fab0959b1296f9b3d170052eb",
+  "parts_quincy/seat_pen2.png": "931a80e2fb97fe71712071c18dbc478cb32757d66b4cb613dfe332a24ccc48b0",
+  "parts_quincy/seat_type.png": "c286e75ce58d919a49cbf459a67bf09ba6bb4874ba4ddc174e83a6fc0cba3ad1",
   "parts_quincy/smile.png": "f5aeda29cb47da30ac3834ef9579d6bfa176e51f67824e87647ea58f5ff37653",
   "parts_quincy/sounds/apex-pro-tkl-v2_Akira/config.json": "1fc06af40c17bb41cc1c1fd9c22a4cbd88746e55c38bc582400e6cda3aa93ebf",
   "parts_quincy/sounds/apex-pro-tkl-v2_Akira/enter.wav": "fe7998dabcc579dd88b8ecb3b22f942efc880bd75f9794b792a41f5c10b51ef3",
