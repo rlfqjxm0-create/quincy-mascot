@@ -1,5 +1,5 @@
 {
- "version": 1786881265,
+ "version": 1786881362,
  "files": {
   "mascot.py": "8f4074ec01b158a4d5689c7e4f515e341874e50865bec5ca50abf4b19284a714",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
@@ -276,5 +276,6 @@
   "parts_quincy/sounds/tealios-v2_Akira/space.wav": "b47b8e94ff0882a8793322ea6275d6447d9bc7f8de2a88791c9631d1164426ba",
   "parts_quincy/sounds/tealios-v2_Akira/tab.wav": "0718e9c5b1311b80d3337617d28667297eee897fa56d3d5a1174b94071fbcbf6"
  },
- "notes": []
+ "notes": [],
+ "silent": true
 }
