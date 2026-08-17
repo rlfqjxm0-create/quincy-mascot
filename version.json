@@ -1,7 +1,7 @@
 {
- "version": 1786946542,
+ "version": 1786947194,
  "files": {
-  "mascot.py": "1c023832c1926dd7f8a7d5bea3654ade7505a9a2e11ba250cb3287642d6d51dd",
+  "mascot.py": "eb89ca966cdcb7405a68420d1456eb6c379b39c106a4b47e64398bbaca6a5918",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -338,6 +338,11 @@
   "parts_quincy/stamps/flower.png": "ed5b9ece5130a07c400974ede9f79a0d1ba23a61621f9b0a105d3d59279bc2fe",
   "parts_quincy/stamps/sprout.png": "7fc5debfff894594c7ff5d2905de9ede3182d3f36365d5cfb24ab77f2c815036"
  },
- "notes": [],
- "silent": true
+ "notes": [
+  "새 주민 '연어'가 이사 왔어요 — 홈에서 만나요",
+  "홈 위쪽 ♪ 단추 — 모두의 플레이리스트! 오늘 올라온 노래를 이어 들을 수 있어요",
+  "곡이 끝나면 다음 곡으로 넘어가요 (맥은 곡을 누르면 유튜브로 열려요)",
+  "홈에서 나를 고르고 간식을 누르면 내 컵케이크를 먹어요 — 10분에 한 번!",
+  "환경설정에서 '타이머와 머리 사이 여백'을 직접 조절할 수 있어요"
+ ]
 }
