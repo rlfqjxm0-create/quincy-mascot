@@ -1,7 +1,7 @@
 {
- "version": 1786949616,
+ "version": 1786956760,
  "files": {
-  "mascot.py": "f0ecba155a6c65e36db34372a7db09426517c249264dd0815005a9114e83caa7",
+  "mascot.py": "febf3f5ac9388ec86d10a949cb2e9b51fabd862c7b6a79d9089cacfaa3613f6e",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -338,9 +338,6 @@
   "parts_quincy/stamps/flower.png": "ed5b9ece5130a07c400974ede9f79a0d1ba23a61621f9b0a105d3d59279bc2fe",
   "parts_quincy/stamps/sprout.png": "7fc5debfff894594c7ff5d2905de9ede3182d3f36365d5cfb24ab77f2c815036"
  },
- "notes": [
-  "새 주민 '레냥'(귤 고양이)이 이사 왔어요 — 홈에서 만나요",
-  "모두의 플레이리스트에서 일부 노래가 재생되지 않던 문제를 고쳤어요 (주소에 개인 재생목록이 붙어 있던 곡)",
-  "노래에 좋아요를 누르면 하트가 내 화면에 바로 보여요"
- ]
+ "notes": [],
+ "silent": true
 }
