@@ -1,7 +1,7 @@
 {
- "version": 1786960686,
+ "version": 1786961662,
  "files": {
-  "mascot.py": "347ee98b47114e50791765d6a585d1248761d4c12713c6b1c20c63669d183fe4",
+  "mascot.py": "64339ffcf8075294eac342881e58a631fa61f2b53a6f66427c59ae4e5c0f3aea",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -42,6 +42,11 @@
   "parts_quincy/seat_pen.png": "ae426f52d57db1e8c9ba5699e8baa804a9578f910e2d5ac0b57fe8fb97e295b5",
   "parts_quincy/seat_pen2.png": "a6acad25c73de1515c1bf5f63a076cc92372f3125e3e3bc9dabb52bc42a42457",
   "parts_quincy/seat_type.png": "8380b9dc40536137dfb532d0327ca1eff67369c408f9cada2f04ed2afa535b50",
+  "parts_quincy/sky_dawn.png": "588c23959f0f6af3c8a5f75fb7eb14ed64d4e8ed567b04bddcf9c2592726c2c1",
+  "parts_quincy/sky_day.png": "8c836f9d19bfde652386227be759bd3cea9ead31c54f35c46eb639a74502445e",
+  "parts_quincy/sky_dusk.png": "357d5a58d58536cd07f06f291be1ea7be6866846a7b83c985a0bcd9af833f321",
+  "parts_quincy/sky_morning.png": "08a2cacc410e1cabe61815bc6601ec4a56265ca792b6f37d247ef597ef89099b",
+  "parts_quincy/sky_night.png": "f762dc17a481c603d8bc1d76f594ace20551e2aab850bfda9cd631f57731ad84",
   "parts_quincy/smile.png": "f5aeda29cb47da30ac3834ef9579d6bfa176e51f67824e87647ea58f5ff37653",
   "parts_quincy/fonts/Pretendard-Bold.otf": "2e91915fab54df71cc9598ebf608b2bdb54c6fe3c066ac61dff0bc44fca71cc7",
   "parts_quincy/fonts/Pretendard-Regular.otf": "3ffbacde6ab8411f1d2db54bb9b1f0b3ee2a738932033722cf0388c06aed1c93",
