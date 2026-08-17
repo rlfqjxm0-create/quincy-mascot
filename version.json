@@ -1,7 +1,7 @@
 {
- "version": 1786942345,
+ "version": 1786943972,
  "files": {
-  "mascot.py": "fa0b97ad904e7cd6aeb4f7ab57042ee730c8503c8db4f52d50e508bee3514ad0",
+  "mascot.py": "1e05d1a60d4bcdf4df56a1435403f15e2d68484ff972135ef40d938317d8c279",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -338,6 +338,9 @@
   "parts_quincy/stamps/flower.png": "ed5b9ece5130a07c400974ede9f79a0d1ba23a61621f9b0a105d3d59279bc2fe",
   "parts_quincy/stamps/sprout.png": "7fc5debfff894594c7ff5d2905de9ede3182d3f36365d5cfb24ab77f2c815036"
  },
- "notes": [],
- "silent": true
+ "notes": [
+  "노래 추천 말풍선에 우클릭하면 좋아요(하트)를 보낼 수 있어요",
+  "받은 좋아요는 말풍선 오른쪽 위에 하트 숫자로 표시돼요",
+  "노래 제목이 길면 마우스를 올렸을 때 옆으로 흐르며 전체가 보여요"
+ ]
 }
