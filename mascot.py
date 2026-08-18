@@ -4347,6 +4347,8 @@ class Mascot:
                              or self.cfg.get("records"))
         self.can_cheer = bool(self.fun or self.cfg.get("records"))
         self.bubble = None           # (텍스트, 사라질 시각)
+        self._bubble_act = None      # 말풍선 속 단추 (글자, 이름, 할 일)
+        self._bubble_btn = None      # 그 단추가 그려진 자리 (x0,y0,x1,y1)
         self.particles = []          # 폭죽 조각 [x, y, vx, vy, 색, 수명]
         self.hat_until = 0.0         # 고깔모자 표시 종료 시각
         self.smile_until = 0.0       # 웃는 표정 종료 시각
@@ -6231,6 +6233,23 @@ class Mascot:
                 self.open_update_news()
                 self._press = None
                 return
+            # 말풍선 속 단추 — 머리 위에 있어 '콕 찌르기'와 자리가 겹치므로
+            # 그보다 먼저 본다
+            bb = getattr(self, "_bubble_btn", None)
+            act = getattr(self, "_bubble_act", None)
+            if (bb and act and bb[0] <= px <= bb[2] and bb[1] <= py <= bb[3]):
+                self.bubble = None
+                self._bubble_act = None
+                self._bubble_btn = None
+                # 할 일은 **다음 차례로 미룬다.** 여기서 바로 부르면 Tk 가
+                # 클릭을 처리하는 도중에 카드를 헐고 다시 만들게 되어
+                # 프로세스가 통째로 죽는다(실측: 세그폴트). 지뢰 15와 같은
+                # 이야기다 — 창을 건드리는 일은 다른 프레임에서.
+                fn = act[2]
+                self.root.after_idle(
+                    lambda: self._safe("bubble_btn", fn))
+                self._press = None
+                return
             # 음악 버튼·환경음 알약이 카드 윗변에 걸쳐 있으므로 카드보다 먼저
             if (ab and ab[0] <= px <= ab[2] and ab[1] <= py <= ab[3]):
                 self._safe("amb_win", self._amb_toggle_win)
@@ -6743,6 +6762,26 @@ class Mascot:
                 except Exception:
                     pass
                 self._amb = None
+            # 소리도 거둔다. 재생 중인 waveOut 핸들을 놓아두고 프로세스가
+            # 끝나면 드라이버가 이미 사라진 버퍼로 되돌아와 **세그폴트**가
+            # 난다 (뽀모도로 알림을 잇달아 울리고 끄면 그 자리에서 재현된다).
+            # 오류 기록도 안 남아서, 사람에게는 '그냥 꺼졌다'로만 보인다.
+            # 거두는 이름이 클래스마다 다르다 — PenSound 는 stop(),
+            # 나머지는 close(). 있는 쪽을 부른다.
+            for _nm in ("pensnd", "pokesnd", "roomsnd", "sparksnd",
+                        "snacksnd", "snd", "_slime_snd"):
+                _s = getattr(self, _nm, None)
+                if _s is None:
+                    continue
+                for _fn in ("close", "stop"):
+                    _f = getattr(_s, _fn, None)
+                    if callable(_f):
+                        try:
+                            _f()
+                        except Exception:
+                            pass
+                        break
+                setattr(self, _nm, None)
             if self._kb is not None:
                 self._kb.stop()
             if self._ms is not None:
@@ -9245,9 +9284,17 @@ class Mascot:
     ]
     CLICK_TALK = TALK
 
-    def _say(self, text, secs=4.0, big=False):
+    def _say(self, text, secs=4.0, big=False, btn=None, act=None):
+        """말풍선. btn·act 를 주면 말풍선 안에 누를 수 있는 단추가 생긴다.
+
+        단추는 **말풍선 글자에 묶어** 둔다 (act 에 글자를 함께 담는다).
+        말풍선을 지우거나 다른 말로 갈아 끼우는 곳이 열 군데가 넘는데,
+        그 모두에 '단추도 지워라'를 붙이면 반드시 하나를 빠뜨린다 —
+        글자가 다르면 단추를 안 그리는 쪽이 저절로 맞는다.
+        """
         self.bubble = (text, time.time() + secs)
         self._bubble_big = bool(big)   # 반응 알림처럼 크게 보여야 하는 말
+        self._bubble_act = ((text, str(btn), act) if (btn and act) else None)
 
     def _talk_pool(self, state):
         return self.cfg.get("talk") or self.TALK
@@ -9545,6 +9592,18 @@ class Mascot:
         font = self._fit(text, 11 if big else 9, self.W - 46)
         w = max(self._mw(text, font) + (42 if big else 34), 74)
         h = max(44 if big else 36, self._mh(font) + (26 if big else 20))
+        # 단추가 붙는 말풍선 — 글자 아래에 자리를 더 낸다. 지금 떠 있는
+        # 말과 짝이 맞을 때만 (다른 말로 바뀌었으면 단추는 따라가지 않는다)
+        act = getattr(self, "_bubble_act", None)
+        act = act if (act and act[0] == text) else None
+        bf = bh = bw = 0
+        if act:
+            bf = self._fit(act[1], 9, self.W - 60)
+            bw = self._mw(act[1], bf) + 26
+            bh = self._mh(bf) + 12
+            w = max(w, bw + 28)
+            h += bh + 8
+        w = min(w, max(74, self.W - 10))   # 창보다 넓어지면 좌우가 잘린다
         cx = self.card_cx
         if time.time() < self.hat_until:      # 고깔모자를 가리지 않게 옆으로
             cx += 42
@@ -9559,7 +9618,20 @@ class Mascot:
         pts = self._bubble_pts(x0, by - h, x1, by, 13, cx + 4, 17, 13)
         c.create_polygon([p + 2 for p in pts], fill="#e6e2e8", outline="")
         c.create_polygon(pts, fill="#ffffff", outline=cd["border"], width=2)
-        c.create_text(cx, by - h / 2, text=text, font=font, fill=cd["text"])
+        if not act:
+            c.create_text(cx, by - h / 2, text=text, font=font, fill=cd["text"])
+            return
+        # 글자는 위쪽, 단추는 아래쪽
+        c.create_text(cx, by - h + (h - bh - 8) / 2, text=text, font=font,
+                      fill=cd["text"])
+        bx0, bx1 = cx - bw / 2, cx + bw / 2
+        by1 = by - 10
+        by0 = by1 - bh
+        self._rr(c, bx0, by0, bx1, by1, min(bh / 2, 11),
+                 fill=cd["fill"], outline=cd["border"], width=2)
+        c.create_text(cx, (by0 + by1) / 2, text=act[1], font=bf,
+                      fill=cd["text"])
+        self._bubble_btn = (bx0, by0, bx1, by1)
 
 
     def _end_workday(self):
@@ -12482,7 +12554,10 @@ class Mascot:
         "short": "%d분 집중 끝! 잠깐 쉬어요",
         "long": "네 번 했어요! 길게 쉬어요",
         "back": "잘 쉬었어요? 다시 시작해요",
+        "done": "한 사이클 끝났어요! 고생했어요",
     }
+    POMO_AGAIN = "뽀모도로 한 사이클 다시 시작"
+    POMO_DONE_SEC = 300.0      # 사이클 끝 말풍선이 머무는 시간
 
     def _pomo(self):
         """지금 뽀모도로 상태. 없으면 꺼진 것으로 본다.
@@ -12557,12 +12632,16 @@ class Mascot:
             line = self.POMO_LINES["back"]
         st["phase"] = nxt
         st["left"] = 0.0
-        # 휴식까지 마치면 한 바퀴가 끝난 것이다 — 거기서 멈춘다. 카드도
-        # 원래 표시로 돌아오고, 더 하려면 다시 시작하면 된다.
-        done = (ph != "focus" and say)
+        # 한 사이클은 '집중 네 번 + 그 사이 짧은 휴식 + 마지막 긴 휴식'이다.
+        # 짧은 휴식 뒤에는 저절로 다음 집중으로 이어지고, 긴 휴식까지
+        # 마쳐야 한 사이클이 끝난다. 예전에는 5분 휴식만 끝나도 멈춰서,
+        # 네 번을 채우려면 사람이 매번 다시 눌러야 했다.
+        done = (ph == "long" and say)
         if done:
             st["on"] = False
             st["end"] = 0.0
+            st["round"] = 0            # 다음 사이클은 처음부터
+            line = self.POMO_LINES["done"]
         else:
             st["end"] = time.time() + self._pomo_len(nxt)
             st["on"] = True
@@ -12570,12 +12649,30 @@ class Mascot:
         if done:
             self._safe("card", self._relayout_card)
         if say:
-            self._safe("pomo_say", self._pomo_alarm, line, nxt)
+            self._safe("pomo_say", self._pomo_alarm, line, nxt, done)
         self._pomo_redraw()
 
-    def _pomo_alarm(self, line, phase):
-        """구간이 바뀔 때 — 말풍선을 띄우고 몸을 편다."""
-        self._say(line, 7.0)
+    def _pomo_restart(self):
+        """사이클이 끝난 뒤 말풍선 단추로 다시 시작."""
+        self._pomo_save({"on": True, "phase": "focus",
+                         "end": time.time() + self._pomo_len("focus"),
+                         "left": 0.0, "round": 0})
+        self._safe("card", self._relayout_card)
+        self._safe("pomo_say", self._pomo_alarm,
+                   self.POMO_LINES["focus"], "focus", False)
+        self._pomo_redraw()
+
+    def _pomo_alarm(self, line, phase, done=False):
+        """구간이 바뀔 때 — 말풍선을 띄우고 몸을 편다.
+
+        사이클이 끝났으면 말풍선에 '다시 시작' 단추를 달아 오래 띄운다.
+        긴 휴식이 끝나는 시각에는 자리를 비웠을 수 있어서다.
+        """
+        if done:
+            self._say(line, self.POMO_DONE_SEC, big=True,
+                      btn=self.POMO_AGAIN, act=self._pomo_restart)
+        else:
+            self._say(line, 7.0)
         if phase in ("short", "long"):
             self._gest_start("stretch", force=True)   # 쉬라고 몸을 편다
             self._safe("pomo_burst", self._burst, 10, 26)
@@ -13737,6 +13834,9 @@ class Mascot:
         self._g_dy = self._g_hdy = self._g_tilt = 0.0
         self._g_hands = None
         self._g_eyes_shut = self._g_smile = False
+        # 말풍선 속 단추 자리도 프레임마다 지운다 — 말풍선이 사라진 뒤에도
+        # 남아 있으면 허공을 눌렀는데 눌린 것이 된다
+        self._bubble_btn = None
         if self._tray_q:
             self._safe("tray_tick", self._tray_tick)
         self._safe("stretch", self._stretch_tick, now, sleeping)
