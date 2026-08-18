@@ -4112,6 +4112,10 @@ class Mascot:
         # 사용자 환경설정 (config 기본값 위에 덮어씀)
         tcfg = self.cfg.get("timer") or {}
         self.us = dict(DEFAULT_SETTINGS)
+        # 캐릭터마다 다른 기본값 (config 의 defaults). 저장된 설정이 있으면
+        # 그쪽이 이긴다 — 처음 켤 때만 쓰이는 값이다.
+        for _k, _v in (self.cfg.get("defaults") or {}).items():
+            self.us[str(_k)] = _v
         self.us["idle_sec"] = float(tcfg.get("idle_sec", self.us["idle_sec"]))
         self.settings_path = os.path.join(self.state_dir, ".settings.json")
         self._font_pct_saved = False
@@ -5167,7 +5171,10 @@ class Mascot:
         self.has["prop"] = False
         pick = self._pick_prop()
         front = os.path.join(self.prop_dir, f"{pick}.png") if pick else ""
-        if pick and os.path.exists(front):
+        # layout 에 앞쪽 자리가 없으면 앞은 건너뛴다 — 뒤쪽만 있는 소품
+        # (레냥 prop10) 이 그렇다. 예전에는 여기서 KeyError 로 죽어
+        # 캐릭터가 아예 안 떴다.
+        if pick and pick in self._prop_layout and os.path.exists(front):
             self.layout["prop"] = self._prop_layout[pick]
             im = Image.open(front).convert("RGBA")
             if s != 1.0:
@@ -14474,19 +14481,19 @@ class Mascot:
                 line2 = self._shade(base, 0.15)
                 inner = self._tint(base, 0.10)
                 for sign, ex in ((-1, hx0 + 30), (1, hx1 - 30)):
-                    (on or cv).create_polygon(
+                    cv.create_polygon(
                         ex - 15 * sign, y + 6, ex + 2 * sign, y - 24,
                         ex + 15 * sign, y + 3,
                         fill=outer, outline=line2, width=2)
-                    (on or cv).create_polygon(
+                    cv.create_polygon(
                         ex - 7 * sign, y + 2, ex + 2 * sign, y - 15,
                         ex + 9 * sign, y + 1, fill=inner, outline="")
             elif deco == "mouse":               # 성실이: 생쥐 귀
                 for ex in (hx0 + 30, hx1 - 30):
-                    (on or cv).create_oval(ex - 15, y - 18, ex + 15, y + 12,
+                    cv.create_oval(ex - 15, y - 18, ex + 15, y + 12,
                                            fill="#9a9a9a", outline="#6f6f6f",
                                            width=2)
-                    (on or cv).create_oval(ex - 8, y - 11, ex + 8, y + 5,
+                    cv.create_oval(ex - 8, y - 11, ex + 8, y + 5,
                                            fill="#e8c4c4", outline="")
             elif deco == "scarf":               # 퀸시: 귀 대신 목도리 띠
                 rrect(hx0 + 20, y - 6, hx1 - 20, y + 22, 10,
@@ -20215,8 +20222,13 @@ class Mascot:
                                        mid + math.sin(a) * r2 * 0.7,
                                        (5 + 7 * (1 - q)) * k, "#ffd75e")
                 if p < 0.5:
-                    c.create_text(cx, top + 8 * k, text="\ud83c\udf89",
-                                  font=("Segoe UI Emoji", int(16 * k)))
+                    # 예전에는 여기에 파티 이모지를 그렸는데, 맥 Tk 는 BMP 밖
+                    # 글자를 못 받아 매 프레임 터졌다 (퀸시 로그에
+                    # UnicodeEncodeError 66번). 같은 느낌을 도형으로 낸다.
+                    self._fx_spark(c, cx, top + 8 * k, 9 * k, "#ffd75e")
+                    for dx2, sc2 in ((-13, 0.6), (13, 0.6)):
+                        self._fx_spark(c, cx + dx2 * k, top + 12 * k,
+                                       9 * k * sc2, "#ffe9a8")
             elif kind == "snack":
                 pass      # 간식은 연출이 아니라 책상에 놓인다 (_draw_snack_on)
 
