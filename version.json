@@ -1,13 +1,13 @@
 {
- "version": 1787304262,
+ "version": 1787304938,
  "files": {
-  "mascot.py": "aababd882f9ab547d0b68474873749221b4503ef7a52cc022fc948f32e4c5750",
+  "mascot.py": "2a1de8238569e1fc656ff4e83416455e9998682c21b0fd8f97f65d29a012e9a3",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
   "parts_quincy/arm_right_typing.png": "53eb0e84e72d0ca0aa85e4abd388451663850938e2fc154abe54a59bd47691d0",
   "parts_quincy/body_open.png": "1538bcd1ff86576c80710b08f25f8d632c5ce4e653d732828f9cc79b2322c143",
-  "parts_quincy/config.json": "d46ce329171d190a95d5cea46b19ae0ff1005f6a73b876328efaed8c8e943692",
+  "parts_quincy/config.json": "9ecf5952137292c7d0457e40bdf1871057971d78b15e43eb2f0c02ce7f00d7b0",
   "parts_quincy/crown.png": "b1b7426a0222ac294a782cb06db6c9c4aba4e660591dd1761dc9e4da050175fc",
   "parts_quincy/desk.png": "f50462cb0854aa8d99497d5f0cf028673fcc2e8f047f9abdb9474e187b2ae19e",
   "parts_quincy/eyes_closed.png": "56021a81adb16d8c6ca0e872b7faf68624a6de6ce789950a6754d470c71eb967",
@@ -170,6 +170,12 @@
   "parts_quincy/sounds/gameover/over1.wav": "98f0544212192e5c718ef3fbe3594f427de5c49b1fdfd59cb7ad65246dbcabb2",
   "parts_quincy/sounds/Gateron Black Ink - Revolt/config.json": "fd2ba9ead98d013f43b54f7d365919d1e3f784e3adc9a5d3968eff8529dbc242",
   "parts_quincy/sounds/Gateron Black Ink - Revolt/Gateron Black.wav": "7e743b05e2c521523bb173cc68c145b628045acbc485599a8d39d57095d0c432",
+  "parts_quincy/sounds/kkodle/bad/bad_1.wav": "860c89186528b1fa1635a1d079950f826982c7ca2dd24de4aac56e23472bfaf3",
+  "parts_quincy/sounds/kkodle/key/key_1.wav": "67cca67ccac95c5abd13f264643cd9270bb42692b2bbc8a63c1b58072f484fed",
+  "parts_quincy/sounds/kkodle/key/key_2.wav": "adae72cd46d8eb3bd76230bd28f2ac37a56b7b42636dabbbf9d140495f82166c",
+  "parts_quincy/sounds/kkodle/key/key_3.wav": "2ff5e36bef5b78fdb35ca346243013ed374d56a092f22112544f06cf0e5b8fe8",
+  "parts_quincy/sounds/kkodle/win/win_1.wav": "f9e30e6948e2690d589b86964f1c145cf39b7988a3aef5ba0a93921f6f519b93",
+  "parts_quincy/sounds/kkodle_bgm/bgm.wav": "b217c5ff36fcfbdacb7b114b4fbc0ac5c0dfd322cb00dab80538493d06bbecc7",
   "parts_quincy/sounds/link65 gold/config.json": "6f6225a5b64efdc73c76039d0081263f6dc402979af3a988c351161f64c01e88",
   "parts_quincy/sounds/link65 gold/link65gold-back1.wav": "36ceead79ac1f1d56314d8bccf407ca60c8bfc6b80c48b7b9a5df46e7eacedc2",
   "parts_quincy/sounds/link65 gold/link65gold-enter1.wav": "cba282de33d5398e593505150f1f960d0beec1d3e7b8964cc9bc4ca348c010a1",
@@ -446,11 +452,13 @@
   "parts_quincy/sounds/whip/whip1.wav": "31c6ef2b789e3713eda0e61ba532246be05c5144affc53e64fe0f06795b7b528",
   "parts_quincy/stamps/bud.png": "6b2b3f6c5b57f26e6b80123d766f8e2e391ade3668f3fd0f7b1686723e67ae8c",
   "parts_quincy/stamps/flower.png": "ed5b9ece5130a07c400974ede9f79a0d1ba23a61621f9b0a105d3d59279bc2fe",
-  "parts_quincy/stamps/sprout.png": "7fc5debfff894594c7ff5d2905de9ede3182d3f36365d5cfb24ab77f2c815036"
+  "parts_quincy/stamps/sprout.png": "7fc5debfff894594c7ff5d2905de9ede3182d3f36365d5cfb24ab77f2c815036",
+  "parts_quincy/words/kkodle.json": "cec16ab9934b2532339e4928c71b3467b03ef57601c6fc7fef8b4174c07d7b63"
  },
  "notes": [
-  "**랭킹 한마디를 게임마다 따로 쓸 수 있습니다.** 수박게임에 남긴 글이 컬러타일·2048에도 똑같이 떠 있던 문제예요. 옛날에 한마디가 하나뿐이던 시절의 값을 다른 게임까지 물려 쓰고 있었습니다 — 이제 게임마다 제 글만 뜹니다",
-  "**홈에서 미니게임을 펼치면 누를 때까지 접히지 않습니다.** 게임이 늘면서 칸이 길어져, 겨냥하다 마우스가 조금만 벗어나도 접혀 버렸어요. 이제 다른 곳을 누를 때에만 접힙니다",
-  "**수박게임 아이콘 색을 '미니게임' 단추와 갈랐습니다.** 둘 다 연두라 어느 것이 무엇인지 알아보기 어려웠어요"
+  "**미니게임에 '꼬들'이 생겼습니다.** 두 글자 낱말을 자모 여섯 칸으로 풀어 여섯 번 안에 맞히는 놀이예요 (초록=자리까지 맞음, 노랑=낱말엔 있지만 자리가 다름). 자판은 두벌식 그대로라 한/영을 안 바꿔도 되고, 새벽 6시에 새 낱말로 바뀝니다",
+  "**모두가 같은 낱말을 풉니다.** 창 오른쪽 '오늘의 기록'에 친구들이 몇 번 만에·언제 맞혔는지 모여요. 차례는 걸린 시간이 아니라 **적은 횟수**로 정해지고, 같으면 먼저 끝낸 사람이 위입니다. 줄을 누르면 그 사람 카드가 펼쳐지고, 제 줄에서는 한마디를 남길 수 있어요",
+  "**랭킹 한마디를 게임마다 따로 쓸 수 있습니다.** 수박게임에 남긴 글이 컬러타일·2048에도 똑같이 떠 있던 문제예요 — 옛날에 한마디가 하나뿐이던 시절의 값을 다른 게임까지 물려 쓰고 있었습니다",
+  "**홈에서 미니게임을 펼치면 누를 때까지 접히지 않습니다.** 게임이 늘면서 칸이 길어져, 겨냥하다 마우스가 조금만 벗어나도 접혀 버렸어요. 수박게임 아이콘 색도 '미니게임' 단추와 갈라 두었습니다"
  ]
 }
