@@ -1,13 +1,13 @@
 {
- "version": 1787313928,
+ "version": 1787397565,
  "files": {
-  "mascot.py": "6bfbe4226d7f4e275b62aeb29597d9cddc9a90c4db0b96e4c042f6692d0a3412",
+  "mascot.py": "5a6d164754a52bca37572f7c31cbb5e668fe6224ea6641494cbf0eac7733ef1b",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
   "parts_quincy/arm_right_typing.png": "53eb0e84e72d0ca0aa85e4abd388451663850938e2fc154abe54a59bd47691d0",
   "parts_quincy/body_open.png": "1538bcd1ff86576c80710b08f25f8d632c5ce4e653d732828f9cc79b2322c143",
-  "parts_quincy/config.json": "9ecf5952137292c7d0457e40bdf1871057971d78b15e43eb2f0c02ce7f00d7b0",
+  "parts_quincy/config.json": "a8badd348f6617c03193c23dffe65a19c160e205466a297a3b04c7f2b3a6ff4e",
   "parts_quincy/crown.png": "b1b7426a0222ac294a782cb06db6c9c4aba4e660591dd1761dc9e4da050175fc",
   "parts_quincy/desk.png": "f50462cb0854aa8d99497d5f0cf028673fcc2e8f047f9abdb9474e187b2ae19e",
   "parts_quincy/eyes_closed.png": "56021a81adb16d8c6ca0e872b7faf68624a6de6ce789950a6754d470c71eb967",
@@ -15,7 +15,7 @@
   "parts_quincy/hat.png": "4bd1da80b760cff3694c7b21350e8dce6a177026846dcd737d796ad7560f277f",
   "parts_quincy/head.png": "7aaccad92754794c95621059bbf4c76b5b274176b031e3ee132765f96e554651",
   "parts_quincy/lashes.png": "189cfb81edb6933d594aba807abc823bd65c07dc2d38f67c43ca6a28333661c0",
-  "parts_quincy/layout.json": "c6d261dda5200614c19ff84708f6d918c4cf6bf1428c1a3bcfe1ca6e8de70707",
+  "parts_quincy/layout.json": "d7fcc5b13c269d1274c656219447bc28a0bd47fb2206d7b00aec2a501e9c5326",
   "parts_quincy/pet1.png": "9e523e33b599ad099d9a8b4197e2e6cb749e1955fb93405cb2a25c0a2a0d6592",
   "parts_quincy/pet2.png": "a628e6a2f124d20a9b9ecc36aeb504b33de6defe350651944b806505b2629bd3",
   "parts_quincy/prop1.png": "080410bbfde6967e82fcb4ae5bf2d1e16bb90dd14ee13218ffc6ab0f1750c88b",
@@ -24,7 +24,23 @@
   "parts_quincy/prop12.png": "8695e3a96e06a2f1ccd88c656e3b89849b01d63ee78fd97f7ca1f855ad55e541",
   "parts_quincy/prop13.png": "56345b669fb58e5dbcef23fe32ceac7bab969ba0111f21a0a6b3b04b9b324c17",
   "parts_quincy/prop14.png": "f287103ec83d2880ec7352fb85842da7b68c7b9c72c68858cd6b44c94268323f",
+  "parts_quincy/prop17.png": "fc7f2ccf06c553349622d63d4ced84fe8fdadb9361b46988b7f1431a3caee7b3",
+  "parts_quincy/prop17_bit2.png": "52fb61637f4bbce67d5ea98c7981610014acbba8451ebc8b87255278963b8ec3",
+  "parts_quincy/prop17_bit3.png": "9569bf7def5b95c2c694b4108a53cadc87a02ea494fd9bf11cd27285d36533f1",
+  "parts_quincy/prop17_bit4.png": "50451e441edf2e5ac22a3d474be0e9cd26a944ce7d7aacf05b4fe63f9d30507a",
+  "parts_quincy/prop18.png": "e5600d9b835bdc23d7639b865a641a8ab92fc24007ec3fa770d57bb0d40f271e",
+  "parts_quincy/prop19.png": "cb1b0769f499e5369839ccfd77df5862c0306d30547aee2b0aeb4c847748462e",
   "parts_quincy/prop2.png": "9bc9d054486d8bae5265b8e32578f2775e46a282454d2507d7928bca65e2f139",
+  "parts_quincy/prop20.png": "9e2e70132625c0848b916b9b034adb23c29e70f23afbb433ec2e1c9dc884c400",
+  "parts_quincy/prop20_bit2.png": "584a038aea582f3001b040e42ee979198f75dbcfdf5aa78ae74579df24da629c",
+  "parts_quincy/prop20_bit3.png": "42c121c9ec22d9007cbc64b3475b90712676c5b37bdc1354bbf7b7728acc833e",
+  "parts_quincy/prop20_bit4.png": "93861ea049efbb9f4bce63a1afc4acd10a6178bec27d72f8a7c49f3e2d0fe9a1",
+  "parts_quincy/prop20_bit5.png": "4809bfecce45ab9f6547eae523dc13ae736b86a9330e9961e6eefcf3f417a8c6",
+  "parts_quincy/prop21.png": "66a57bddeeba14b6b5a426b4e2baf9c9d511cbb1091df36fee374157c362adaa",
+  "parts_quincy/prop21_bit2.png": "d58d2e52c560028a8d2fbd72607d300e4497ab90c74b6f151f75c4ba9e39f840",
+  "parts_quincy/prop21_bit3.png": "a57385959d741788e857aa42d6234573f4b9abba5b57840da59cc4e0ec120159",
+  "parts_quincy/prop22.png": "93adb040a2d3ae84a03943d3d86f68336d781734d54747acc054b15f37319348",
+  "parts_quincy/prop23.png": "ca27023aa633e9767ee13834e35c60231be115c1822e37062e6f96371c8b0cf6",
   "parts_quincy/prop3.png": "c747b74d6f50d0a99ff15c96512b0fc53865a8796d88df9686442df5a1df7f97",
   "parts_quincy/prop4.png": "6dc441cd23fd6470b29cc665a8da3a1d3a8d21f3ddb0e2ebebee27fda7fab850",
   "parts_quincy/prop5.png": "45d0d1aebfc85240af17da56efd83e94ff02098acc10698e3b439c4e3434b585",
@@ -457,8 +473,8 @@
   "parts_quincy/words/kkodle.json": "cec16ab9934b2532339e4928c71b3467b03ef57601c6fc7fef8b4174c07d7b63"
  },
  "notes": [
-  "**컬러타일에서 틀린 자리를 짚으면 소리가 납니다.** 지난번에 넣었다고 알려 드렸는데 실제로는 한 번도 안 났어요 — '틀렸다'를 빈 목록으로 알리는데, 감싸 둔 함수가 그것을 빈 글자로 바꿔 버려서 소리를 내는 가지가 아예 안 불렸습니다",
-  "**홈 메뉴의 '?' 를 '설명서'로 바꿨습니다.** 옆 단추들이 다 이름인데 혼자만 기호라 무엇인지 알아보기 어려웠어요",
-  "**준사 메이드복에서 소품이 제자리로 왔습니다.** 옷마다 파츠가 통째로 옮겨져 있는데 소품만 원래 옷 좌표로 놓여 전부 아래로 처져 있었어요"
+  "**사가님이 소품 7종을 추가해 줬어요!** 미쿠 · 생선 · 계란 · 블록슈 불꽃 · 츠나 불꽃 · 당근토끼 · 방울고양이. 다들 사가님께 감사의 채찍질을 해주세요.",
+  "**미쿠와 불꽃은 여러 조각이 따로 움직입니다.** 미쿠는 양갈래가 흔들리고 파를 든 손이 신나게 움직여요. 불꽃은 밑동을 붙박이로 두고, 겹쳐 놓은 안쪽 불꽃마다 박자를 어긋내 타오르듯 넘실거립니다",
+  "소품은 켤 때마다 하나가 무작위로 나옵니다. 켜 둔 채로 바꾸고 싶으면 **우클릭 → 소품 새로고침**을 누르세요"
  ]
 }
