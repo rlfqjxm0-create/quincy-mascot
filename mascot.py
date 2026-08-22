@@ -1046,7 +1046,15 @@ class MacCharLayer:
         self.ok = False
         self.layer = None
         self._sz = None
-        from Quartz import CALayer                 # pyobjc (맥 번들에 있다)
+        # **Quartz 모듈이 맥 번들에 없다** (퀸시 로그 — ModuleNotFoundError).
+        # 클래스만 있으면 되므로 이미 올라와 있는 것을 이름으로 찾는다 —
+        # AppKit 이 QuartzCore 를 끌고 들어오므로 CALayer 는 등록돼 있다.
+        # 그래도 없으면 예외 → 부르는 쪽이 색상키로 되돌린다.
+        try:
+            from Quartz import CALayer
+        except Exception:
+            import objc
+            CALayer = objc.lookUpClass("CALayer")
         root.update_idletasks()
         # Tk 창 → NSView → 그 레이어. PyObjC 로만 다룬다 (ctypes 로 직접
         # 포인터를 만지면 잘못됐을 때 그 자리서 프로세스가 죽는다).
@@ -1088,6 +1096,30 @@ class MacCharLayer:
         self.view, self.host, self.layer = view, host, lay
         self.ok = True
 
+    @staticmethod
+    def _cg(im):
+        """PIL → CGImage. **Quartz 모듈 없이** 만든다.
+
+        맥 번들에 pyobjc-framework-Quartz 가 빠져 있어(퀸시 로그) CGImage*
+        C 함수를 못 쓴다. AppKit 의 NSBitmapImageRep 은 있으므로 거기에
+        바이트를 채우고 `.CGImage()` 로 받는다. 알파는 미리 곱한 상태로
+        넣는다 — NSBitmapImageRep 은 기본이 premultiplied 다 (지뢰 117).
+        """
+        from AppKit import NSBitmapImageRep, NSDeviceRGBColorSpace
+        w, h = im.size
+        raw = im.convert("RGBa").tobytes("raw", "RGBa")
+        rep = NSBitmapImageRep.alloc().            initWithBitmapDataPlanes_pixelsWide_pixelsHigh_bitsPerSample_samplesPerPixel_hasAlpha_isPlanar_colorSpaceName_bytesPerRow_bitsPerPixel_(
+                None, w, h, 8, 4, True, False, NSDeviceRGBColorSpace,
+                w * 4, 32)
+        if rep is None:
+            raise RuntimeError("NSBitmapImageRep 못 만듦")
+        buf = rep.bitmapData()
+        buf[:len(raw)] = raw
+        got = rep.CGImage()
+        if got is None:
+            raise RuntimeError("CGImage 못 만듦")
+        return got
+
     def push(self, im, _x=None, _y=None):
         """합성한 그림을 덧레이어에 올린다 (알파는 미리 곱한다 — 지뢰 117).
 
@@ -1098,20 +1130,12 @@ class MacCharLayer:
             im = im.resize((max(1, int(round(im.width * self.scale))),
                             max(1, int(round(im.height * self.scale)))),
                            Image.LANCZOS)
-        from Foundation import NSData
-        from Quartz import (CATransaction, CGColorSpaceCreateDeviceRGB,
-                            CGDataProviderCreateWithCFData, CGImageCreate,
-                            kCGImageAlphaPremultipliedLast)
-        w, h = im.size
-        raw = im.convert("RGBa").tobytes("raw", "RGBa")
-        data = NSData.dataWithBytes_length_(raw, len(raw))
-        prov = CGDataProviderCreateWithCFData(data)
-        img = CGImageCreate(w, h, 8, 32, w * 4,
-                            CGColorSpaceCreateDeviceRGB(),
-                            kCGImageAlphaPremultipliedLast, prov, None,
-                            False, 0)
-        if img is None:
-            raise RuntimeError("CGImage 못 만듦")
+        try:
+            from Quartz import CATransaction
+        except Exception:
+            import objc
+            CATransaction = objc.lookUpClass("CATransaction")
+        img = self._cg(im)
         CATransaction.begin()
         CATransaction.setDisableActions_(True)
         try:
@@ -1126,7 +1150,11 @@ class MacCharLayer:
 
     def hide(self):
         try:
-            from Quartz import CATransaction
+            try:
+                from Quartz import CATransaction
+            except Exception:
+                import objc
+                CATransaction = objc.lookUpClass("CATransaction")
             CATransaction.begin()
             CATransaction.setDisableActions_(True)
             self.layer.setContents_(None)
@@ -14445,6 +14473,36 @@ class Mascot:
             self._safe("smooth_bind", self._bind_char_layer, lay)
         return lay
 
+    GAME_MS = 33 if IS_MAC else 16   # 미니게임 기본 프레임 간격
+    GAME_SLACK = 6                   # 걸린 시간에 더해 주는 숨 쉴 틈(ms)
+
+    def _game_again(self, win, attr, fn, t0, base=None):
+        """미니게임 다음 프레임 예약 — **걸린 시간만큼 뒤로 미룬다.**
+
+        예전에는 맨 위에서 `after(16, tick)` 으로 먼저 예약했다. 한 걸음이
+        16ms 를 넘기면 다음 콜백이 이미 '시간이 지난' 상태가 되고, Tk 는
+        밀린 것을 쉼 없이 잇달아 부른다. 그 사이 idle 틈이 사라지는데,
+        **맥은 그 틈에서 Cocoa 이벤트(Esc·닫기·마우스)를 꺼내 처리**한다 —
+        틈이 없어지니 입력이 영영 처리되지 않아 앱이 통째로 먹통이 됐다
+        (퀸시 제보, 그 맥에서 이 방식으로 고쳐 확인함). 윈도우는 캔버스가
+        빨라 한 걸음이 대개 16ms 안에 끝나서 재현되지 않았다.
+
+        이렇게 두면 최악이 '먹통'이 아니라 '조금 느려짐'으로 끝난다.
+        맥은 기본을 30fps 로 둔다 — 물리는 실제 dt 로 적분하고 `_wg_step`
+        이 dt 에 상한을 두므로 게임 속도·판정은 그대로다.
+        """
+        try:
+            if not win.winfo_exists():
+                return
+        except Exception:
+            return
+        try:
+            spent = int((time.time() - t0) * 1000)
+            ms = self.GAME_MS if base is None else max(base, self.GAME_MS)
+            setattr(self, attr, win.after(max(ms, spent + self.GAME_SLACK), fn))
+        except Exception:
+            pass
+
     def _pil_font(self, px, bold=False):
         """PIL 로 글자를 그릴 때 쓸 글꼴 (크기별 캐시).
 
@@ -27377,24 +27435,27 @@ class Mascot:
                     return
             except Exception:
                 return
-            self._wg_after = win.after(16, tick)   # 먼저 예약 (지뢰 14 규칙)
             now = time.time()
-            dt = now - st["last"]
-            st["last"] = now
-            self._safe("wgame", self._wg_step, dt)
-            self._safe("wgame", redraw)
-            if now - st["rank_at"] > 5.0:      # 친구 기록이 오면 갱신
-                st["rank_at"] = now
-                self._safe("wg_rank", draw_rank)
-                # 큰 공이 가까워졌으면 그때 한 단계 더 굽는다
-                g3 = self._wg
-                if g3 is not None:
-                    need = 2 + max((f["t"] for f in g3["fruits"]),
-                                   default=0)
-                    if need > self._wg_bake_n:
-                        self._safe("wg_bake", self._wg_bake_kick, k, need)
-                        if self._wg_wrap_after is None:
-                            self._safe("wg_bake", wrap_some)
+            self._wg_after = None
+            try:
+                dt = now - st["last"]
+                st["last"] = now
+                self._safe("wgame", self._wg_step, dt)
+                self._safe("wgame", redraw)
+                if now - st["rank_at"] > 5.0:      # 친구 기록이 오면 갱신
+                    st["rank_at"] = now
+                    self._safe("wg_rank", draw_rank)
+                    # 큰 공이 가까워졌으면 그때 한 단계 더 굽는다
+                    g3 = self._wg
+                    if g3 is not None:
+                        need = 2 + max((f["t"] for f in g3["fruits"]),
+                                       default=0)
+                        if need > self._wg_bake_n:
+                            self._safe("wg_bake", self._wg_bake_kick, k, need)
+                            if self._wg_wrap_after is None:
+                                self._safe("wg_bake", wrap_some)
+            finally:
+                self._game_again(win, "_wg_after", tick, now)
 
         def on_move(e):
             fn8 = getattr(win, "_wg_volfn", None)
@@ -28788,8 +28849,12 @@ class Mascot:
                     return
             except Exception:
                 return
-            self._ct_after = win.after(50, tick)   # 먼저 예약 (지뢰 20)
-            self._safe("ctile", redraw, time.time())
+            now9 = time.time()
+            self._ct_after = None
+            try:
+                self._safe("ctile", redraw, now9)
+            finally:               # 걸린 만큼 미뤄 예약 (맥 먹통 — 지뢰 129)
+                self._game_again(win, "_ct_after", tick, now9, base=50)
 
         def on_click(e):
             g2 = self._ct
@@ -30137,8 +30202,12 @@ class Mascot:
                 return
             # 16ms = 60fps. 예전 50ms 는 미끄러짐(0.135초)이 두 프레임밖에
             # 안 돼서 뚝뚝 끊겼다 (제보 · 실측 19.5fps).
-            self._g2_after = win.after(16, tick)   # 먼저 예약 (지뢰 20)
-            self._safe("g2048", redraw, time.time())
+            now9 = time.time()
+            self._g2_after = None
+            try:
+                self._safe("g2048", redraw, now9)
+            finally:               # 걸린 만큼 미뤄 예약 (맥 먹통 — 지뢰 129)
+                self._game_again(win, "_g2_after", tick, now9)
 
         def restart():
             cv.delete("over")
@@ -31675,8 +31744,11 @@ class Mascot:
                     return
             except Exception:
                 return
-            self._kk_after = win.after(33, tick)      # 먼저 예약 (지뢰 20)
-            self._safe("kkodle", frame)
+            now9 = time.time()
+            try:
+                self._safe("kkodle", frame)
+            finally:               # 걸린 만큼 미뤄 예약 (맥 먹통 — 지뢰 129)
+                self._game_again(win, "_kk_after", tick, now9, base=33)
 
         def rank_sig():
             """기록 칸이 바뀌었는가 — 친구가 방금 풀면 바로 보여야 한다.
