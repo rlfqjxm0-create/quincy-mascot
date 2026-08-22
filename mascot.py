@@ -1085,6 +1085,16 @@ class MacCharLayer:
                 self.scale = sc
         except Exception:
             pass
+        # 진단용 — 맥에서 처음 도는 길이라, 어긋났을 때 이 값들로 한 번에
+        # 갈린다. 뷰가 뒤집혀 있는지(그림이 거꾸로 나오는지)가 특히 중요하다.
+        self.diag = ""
+        try:
+            b0 = view.bounds()
+            self.diag = ("배율 %.2f · 뷰 %.0fx%.0f · flipped=%s"
+                         % (self.scale, b0.size.width, b0.size.height,
+                            bool(view.isFlipped())))
+        except Exception:
+            pass
         lay = CALayer.layer()
         lay.setContentsScale_(self.scale)
         lay.setContentsGravity_("topLeft")
@@ -14586,8 +14596,8 @@ class Mascot:
                 self._smooth_try_path = None
                 if IS_MAC:
                     self._safe("mac_smooth_log", self._mac_log,
-                               "매끈 덧레이어 켜짐 — 화면배율 %.2f · 그림 %dx%d"
-                               % (getattr(lay, "scale", 1.0),
+                               "매끈 덧레이어 켜짐 — %s · 그림 %dx%d"
+                               % (getattr(lay, "diag", "?"),
                                   sheet.im.width, sheet.im.height))
         except Exception:
             ok, _ = False, self._log_error("smooth_push")

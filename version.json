@@ -1,13 +1,13 @@
 {
- "version": 1787421772,
+ "version": 1787423467,
  "files": {
-  "mascot.py": "018547aaef8c0f701d82d54ecdc91367547a8ced68e1886943e74a52117d777a",
+  "mascot.py": "8042422cc81e1d5ff8deb2579f3f5b10d157986aecd0a777213a1808d3a9ce04",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
   "parts_quincy/arm_right_typing.png": "53eb0e84e72d0ca0aa85e4abd388451663850938e2fc154abe54a59bd47691d0",
   "parts_quincy/body_open.png": "1538bcd1ff86576c80710b08f25f8d632c5ce4e653d732828f9cc79b2322c143",
-  "parts_quincy/config.json": "a14a04fde0475359feb287591d098df7d12ef20d6000894bfe0c11d6a4ec7ef5",
+  "parts_quincy/config.json": "ebb29ec78b327e90651ec5d26214d869c6499b627d6f6b7121084d3111a14499",
   "parts_quincy/crown.png": "b1b7426a0222ac294a782cb06db6c9c4aba4e660591dd1761dc9e4da050175fc",
   "parts_quincy/desk.png": "f50462cb0854aa8d99497d5f0cf028673fcc2e8f047f9abdb9474e187b2ae19e",
   "parts_quincy/eyes_closed.png": "56021a81adb16d8c6ca0e872b7faf68624a6de6ce789950a6754d470c71eb967",
