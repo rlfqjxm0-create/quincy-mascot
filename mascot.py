@@ -5476,14 +5476,27 @@ class Mascot:
         # 표시를 남기고, 한 번 성공하면 지운다. 표시가 남은 채로 켜졌다는
         # 것은 지난번에 그 자리서 죽었다는 뜻이다 (맥 검증을 못 해 둔다).
         self._smooth_try_path = os.path.join(self.state_dir, ".smooth_try")
-        if _sb and os.path.exists(self._smooth_try_path):
-            _sb = False
-            self.us[_key] = False
-            self._smooth_why = "지난번에 켜다 멈춰서 꺼 뒀어요"
+        _tries = 0
+        try:
+            with open(self._smooth_try_path) as _fp:
+                _tries = int((_fp.read() or "0").strip() or 0)
+        except Exception:
+            _tries = 0
+        self._smooth_tries = _tries
+        if not _sb:
+            # 꺼져 있으면 표시를 지운다 — 나중에 켤 때 깨끗하게 시작한다
             try:
                 os.remove(self._smooth_try_path)
             except Exception:
                 pass
+            self._smooth_tries = 0
+        elif _tries >= 2:
+            # 두 번 잇달아 켜다 멈췄다 — 이 컴퓨터에서는 안 되는 길이다.
+            # 표시를 **남겨 둔다**. 지우면 다음 실행에 또 해 보게 되어
+            # 켜졌다 죽었다를 오간다.
+            _sb = False
+            self.us[_key] = False
+            self._smooth_why = "두 번 켜다 멈춰서 꺼 뒀어요"
         self._smooth_on = bool((IS_WIN or IS_MAC) and _sb and not SMOOTH_OFF)
         self._load_parts()
 
@@ -14416,7 +14429,7 @@ class Mascot:
             # 켜다 죽는 경우를 위해 표시를 먼저 남긴다 (첫 성공에 지운다)
             try:
                 with open(self._smooth_try_path, "w") as fp:
-                    fp.write("1")
+                    fp.write(str(int(self._smooth_tries) + 1))
             except Exception:
                 pass
             lay = MacCharLayer(self.root) if IS_MAC else CharLayer(self.root)
