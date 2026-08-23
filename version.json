@@ -1,7 +1,7 @@
 {
- "version": 1787511759,
+ "version": 1787512744,
  "files": {
-  "mascot.py": "bd15c0d059d06a72ecca5256dc71b3d37c21aa7d0ca9f5808b1b5726e9ed2e27",
+  "mascot.py": "b4a1eb38effc24f89b487b2f0318d1903fa57ebf518b3dc35c0b9d9899f48905",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -478,8 +478,6 @@
   "parts_quincy/stamps/sprout.png": "7fc5debfff894594c7ff5d2905de9ede3182d3f36365d5cfb24ab77f2c815036",
   "parts_quincy/words/kkodle.json": "cec16ab9934b2532339e4928c71b3467b03ef57601c6fc7fef8b4174c07d7b63"
  },
- "notes": [
-  "새 기능 '상태 칩' — 캐릭터 우클릭 → 상태 칩에서 지금 무엇을 하는 중인지 고를 수 있어요. 자리비움 · 게임 중 · 영화 감상 중 · 밥 먹는 중을 고르면 캐릭터가 그 행동을 하고, 홈의 내 칸에도 표시돼요. 원래대로 돌리려면 '온라인'을 고르면 돼요.",
-  "소품이 팔에 가려지지 않게 위로 올렸어요. 여러 겹으로 된 소품(불꽃 같은 것)도 안쪽 겹까지 제대로 나와요."
- ]
+ "notes": [],
+ "silent": true
 }
