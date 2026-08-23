@@ -1,7 +1,7 @@
 {
- "version": 1787488988,
+ "version": 1787498026,
  "files": {
-  "mascot.py": "594c9bff085bf96fe5528c32f446f654e443aad676dd092350291cd77e9f85bf",
+  "mascot.py": "45231455aac7149730ffe595d27f2002809ce9ea3c3c0276aed42b4b60c77d5f",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -472,8 +472,6 @@
   "parts_quincy/stamps/sprout.png": "7fc5debfff894594c7ff5d2905de9ede3182d3f36365d5cfb24ab77f2c815036",
   "parts_quincy/words/kkodle.json": "cec16ab9934b2532339e4928c71b3467b03ef57601c6fc7fef8b4174c07d7b63"
  },
- "notes": [
-  "새 친구가 둘 들어왔어요 — 각얼음 깅규와 독사 하독이에요. 홈에서 만나 보세요!",
-  "우클릭 메뉴에 '오류 기록 폴더 열기'가 생겼어요. 뭔가 안 될 때 보내 주실 파일을 바로 찾을 수 있어요."
- ]
+ "notes": [],
+ "silent": true
 }
