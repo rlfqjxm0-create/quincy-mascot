@@ -1,7 +1,7 @@
 {
- "version": 1787691678,
+ "version": 1787692644,
  "files": {
-  "mascot.py": "fbbd51154d02b797fd8c4927f73b974fc08c82657ef60526e60ec725b2f1ec99",
+  "mascot.py": "1ce37ec906567ae0321bdd1b51a9f301e71ebc98c2781078f185015fb326c31a",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -21,7 +21,7 @@
   "parts_quincy/hat.png": "4bd1da80b760cff3694c7b21350e8dce6a177026846dcd737d796ad7560f277f",
   "parts_quincy/head.png": "7aaccad92754794c95621059bbf4c76b5b274176b031e3ee132765f96e554651",
   "parts_quincy/lashes.png": "189cfb81edb6933d594aba807abc823bd65c07dc2d38f67c43ca6a28333661c0",
-  "parts_quincy/layout.json": "6945f9b416e7a88d509ce9cfcc71406a19aa95994efa12be441c3537d4d4c780",
+  "parts_quincy/layout.json": "5bface91d5959c6098e0d8ec41b36f0355d8d5075fac608784533d8fa64a98c0",
   "parts_quincy/pet1.png": "9e523e33b599ad099d9a8b4197e2e6cb749e1955fb93405cb2a25c0a2a0d6592",
   "parts_quincy/pet2.png": "a628e6a2f124d20a9b9ecc36aeb504b33de6defe350651944b806505b2629bd3",
   "parts_quincy/prop1.png": "080410bbfde6967e82fcb4ae5bf2d1e16bb90dd14ee13218ffc6ab0f1750c88b",
@@ -45,14 +45,16 @@
   "parts_quincy/prop21.png": "66a57bddeeba14b6b5a426b4e2baf9c9d511cbb1091df36fee374157c362adaa",
   "parts_quincy/prop21_bit2.png": "d58d2e52c560028a8d2fbd72607d300e4497ab90c74b6f151f75c4ba9e39f840",
   "parts_quincy/prop21_bit3.png": "a57385959d741788e857aa42d6234573f4b9abba5b57840da59cc4e0ec120159",
-  "parts_quincy/prop22.png": "0fc42bac0734cc7bfc87a3aba361b590d0a75298f8af523a065a6802bc9176f0",
-  "parts_quincy/prop23.png": "cac93ef6f7f5df11cd05b6e3c3832acc1e3c96c71d1283b536859aaecdb02aec",
+  "parts_quincy/prop22.png": "93adb040a2d3ae84a03943d3d86f68336d781734d54747acc054b15f37319348",
+  "parts_quincy/prop23.png": "ca27023aa633e9767ee13834e35c60231be115c1822e37062e6f96371c8b0cf6",
   "parts_quincy/prop24.png": "7c6f6f1167a6269472767792f2836bf000ba53a0ca357d2274157124432c6516",
   "parts_quincy/prop24_bit2.png": "540eb6da42103448419bc79f6aff24fc9c9447ad9c33e0a6eb7eb7dedba0ef8c",
   "parts_quincy/prop25.png": "fafac1f8081c4e7dae630b28aaef3ec83450f8bcab9af4f9a4880bcdb9e5d2fe",
   "parts_quincy/prop25_bit2.png": "73b78d4db6f5c5270c6c3388e5adfd8342c45b739a486f0464cc43adc4c49623",
   "parts_quincy/prop25_bit3.png": "54289018f464393660bd2614a5b627ebc49adf88ca68ef6c577a76a3dc7db92d",
   "parts_quincy/prop25_bit4.png": "3a8b19ca9e062febff6ba5e5eecbbbe6737250e6f5d6601918f136b7bf722541",
+  "parts_quincy/prop26.png": "159da01abd8c7243340318d07b26ab10f0b8e489625d5af1653487ee39cf7e6f",
+  "parts_quincy/prop27.png": "4fe91e68187b17834c09ca51dc6756bcf1d446ce2a24d4467d65b6b6020c79be",
   "parts_quincy/prop3.png": "c747b74d6f50d0a99ff15c96512b0fc53865a8796d88df9686442df5a1df7f97",
   "parts_quincy/prop4.png": "6dc441cd23fd6470b29cc665a8da3a1d3a8d21f3ddb0e2ebebee27fda7fab850",
   "parts_quincy/prop5.png": "45d0d1aebfc85240af17da56efd83e94ff02098acc10698e3b439c4e3434b585",
@@ -484,7 +486,6 @@
   "parts_quincy/stamps/sprout.png": "7fc5debfff894594c7ff5d2905de9ede3182d3f36365d5cfb24ab77f2c815036",
   "parts_quincy/words/kkodle.json": "cec16ab9934b2532339e4928c71b3467b03ef57601c6fc7fef8b4174c07d7b63"
  },
- "notes": [
-  "새 소품 4종이 왔어요 — 잠자는 고양이(가끔 눈을 뜨고 빤히 봐요), 김이 폴폴 나는 왕만두, 아기 쪽쪽이, 토끼 머리띠. '소품 새로고침'을 누르다 보면 만날 수 있어요."
- ]
+ "notes": [],
+ "silent": true
 }
