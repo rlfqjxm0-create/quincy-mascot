@@ -1,7 +1,7 @@
 {
- "version": 1787709791,
+ "version": 1787715995,
  "files": {
-  "mascot.py": "018be95a9e3a5d7bb3d8bd20d600d438dc46a9ad7d7710fb8a518fa457c6946c",
+  "mascot.py": "5efb6f5198fe437b2ecbe25ecc283968d6357e03c0184e4e2d104530b016cd86",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -21,7 +21,7 @@
   "parts_quincy/hat.png": "4bd1da80b760cff3694c7b21350e8dce6a177026846dcd737d796ad7560f277f",
   "parts_quincy/head.png": "7aaccad92754794c95621059bbf4c76b5b274176b031e3ee132765f96e554651",
   "parts_quincy/lashes.png": "189cfb81edb6933d594aba807abc823bd65c07dc2d38f67c43ca6a28333661c0",
-  "parts_quincy/layout.json": "5bface91d5959c6098e0d8ec41b36f0355d8d5075fac608784533d8fa64a98c0",
+  "parts_quincy/layout.json": "d4238c7fa6007342ce3439b6b428bbbb7294e41a1ae5aa2813b1df14f2f467f6",
   "parts_quincy/pet1.png": "9e523e33b599ad099d9a8b4197e2e6cb749e1955fb93405cb2a25c0a2a0d6592",
   "parts_quincy/pet2.png": "a628e6a2f124d20a9b9ecc36aeb504b33de6defe350651944b806505b2629bd3",
   "parts_quincy/prop1.png": "080410bbfde6967e82fcb4ae5bf2d1e16bb90dd14ee13218ffc6ab0f1750c88b",
@@ -55,6 +55,11 @@
   "parts_quincy/prop25_bit4.png": "3a8b19ca9e062febff6ba5e5eecbbbe6737250e6f5d6601918f136b7bf722541",
   "parts_quincy/prop26.png": "159da01abd8c7243340318d07b26ab10f0b8e489625d5af1653487ee39cf7e6f",
   "parts_quincy/prop27.png": "4fe91e68187b17834c09ca51dc6756bcf1d446ce2a24d4467d65b6b6020c79be",
+  "parts_quincy/prop28.png": "826b57b8a5d15867b3c2b416f7f92a8cf9abe70c6355d2b51825450a3dd23c22",
+  "parts_quincy/prop28_bit2.png": "0d32d9af3fdc82b65b11d66bea5648447ad51221051072f225a05aac71400b2b",
+  "parts_quincy/prop28_bit3.png": "2d07fb7c1555c88738d162d537d48418d1a216a0e948acbc4daa88449c691ebc",
+  "parts_quincy/prop28_bit4.png": "e5623419e9b45993418c0782367669d26c6a76904aaf0c5bfe7e770e8569efbf",
+  "parts_quincy/prop28_bit5.png": "2b0f34d3cc2e5c7c65c2d7d68ed510edc4e1b4aab5df83d475adeec9e33ce9d6",
   "parts_quincy/prop3.png": "c747b74d6f50d0a99ff15c96512b0fc53865a8796d88df9686442df5a1df7f97",
   "parts_quincy/prop4.png": "6dc441cd23fd6470b29cc665a8da3a1d3a8d21f3ddb0e2ebebee27fda7fab850",
   "parts_quincy/prop5.png": "45d0d1aebfc85240af17da56efd83e94ff02098acc10698e3b439c4e3434b585",
@@ -495,6 +500,10 @@
   "parts_quincy/stamps/sprout.png": "7fc5debfff894594c7ff5d2905de9ede3182d3f36365d5cfb24ab77f2c815036",
   "parts_quincy/words/kkodle.json": "cec16ab9934b2532339e4928c71b3467b03ef57601c6fc7fef8b4174c07d7b63"
  },
- "notes": [],
- "silent": true
+ "notes": [
+  "새 소품 4종이 왔어요 — 잠자는 고양이, 김이 폴폴 나는 왕만두, 아기 쪽쪽이, 토끼 머리띠. '소품 새로고침'을 누르다 보면 만날 수 있어요.",
+  "고양이를 클릭하면 야옹 하고 울어요. 고양이 머리를 살살 쓰다듬으면(드래그) 고롱고롱 소리를 내요.",
+  "모두의 플레이리스트에서 퍼오기가 막혀 건너뛰던 곡도 이제 재생돼요. 유튜브 프리미엄을 쓰신다면 음악 메뉴에서 한 번 로그인해 두면 광고 없이 나와요.",
+  "하독의 반려동물 고양이 비비도 있어요! 발과 꼬리를 살랑이는 비비를 클릭하거나 몸을 쓰다듬어 보세요."
+ ]
 }
