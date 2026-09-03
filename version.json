@@ -1,7 +1,7 @@
 {
- "version": 1788394073,
+ "version": 1788396671,
  "files": {
-  "mascot.py": "ba6fcd7dbef7ed2669be4004b92f9d9c0b8f78198a3da0a83b3b09c04453489d",
+  "mascot.py": "a9a4edcee41532ec8aef46a5e44472def4abb932bfb1654651da4734d63aa158",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -532,8 +532,8 @@
   "parts_quincy/words/kkodle.json": "cec16ab9934b2532339e4928c71b3467b03ef57601c6fc7fef8b4174c07d7b63"
  },
  "notes": [
-  "환경음이 여섯 가지 늘었어요 — 바다 동굴·바다 파도·숲·숲 새소리·숲 새소리2·일상 빗소리2. 모두 3분짜리라 오래 틀어도 덜 지루하고, 끝과 처음을 겹쳐 이어 붙여 반복해도 이음매가 안 들려요",
-  "환경음이 많아져서 고르는 창에 스크롤이 생겼어요 — 일곱 줄까지 보이고 휠이나 오른쪽 막대로 나머지를 봐요"
+  "캐릭터 폼을 바꾸면 홈·뽀모도로 창·바탕화면에서도 그 모습으로 보여요 (사가의 변신 전/후) — 모두에게 바로 반영돼요",
+  "같이하기에서 나간 사람이 창에 계속 남아 있던 것을 고쳤어요 — 나감 신호를 놓쳐도 4분 뒤 저절로 빠지고, 대기실이면 자동 시작도 다시 돌아가요"
  ],
  "silent": true
 }
