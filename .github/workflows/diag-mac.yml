@@ -8,7 +8,7 @@ on:
 jobs:
   diag:
     runs-on: macos-26
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -24,4 +24,12 @@ jobs:
       - name: 진단 실행
         run: |
           set -x
-          /tmp/venv/bin/python -X utf8 diag_mac.py parts_quincy
+          /tmp/venv/bin/python -X utf8 diag_mac.py parts_quincy --bgm
+
+      - name: 찍은 그림 올리기
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shots
+          path: shots/
+          if-no-files-found: warn
