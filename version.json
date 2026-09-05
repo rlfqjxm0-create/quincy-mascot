@@ -1,5 +1,5 @@
 {
- "version": 1788616848,
+ "version": 1788617118,
  "files": {
   "mascot.py": "02923098062b9ed864df4af0a5f583b02abac81bd3106cd039250e6c88e87287",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
@@ -531,6 +531,11 @@
   "parts_quincy/stamps/sprout.png": "7fc5debfff894594c7ff5d2905de9ede3182d3f36365d5cfb24ab77f2c815036",
   "parts_quincy/words/kkodle.json": "cec16ab9934b2532339e4928c71b3467b03ef57601c6fc7fef8b4174c07d7b63"
  },
- "notes": [],
- "silent": true
+ "notes": [
+  "오노추 하트 — 목록에도 보이고, 껐다 켜도 남아요 (노래 주인이 꺼져 있어도 세요)",
+  "재생 중에 복사한 주소(watch?v=…&list=…)도 재생목록으로 펼쳐요",
+  "브리핑 '하루의 구성'이 24시간을 넘던 것을 고쳤어요",
+  "(맥) 플레이리스트 영상이 까맣게 보이던 것 — 이제 창 위로 올라와요",
+  "(맥) 유튜브 로그인 뒤에도 '로그인 안 됨'이 남던 것을 고쳤어요"
+ ]
 }
