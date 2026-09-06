@@ -1,7 +1,7 @@
 {
- "version": 1788719820,
+ "version": 1788724641,
  "files": {
-  "mascot.py": "61ae45e44a7907bbda77d15ba073e964db0f160aca11f8a7369be77aede3bcbb",
+  "mascot.py": "8dbc3d98950b9521d40bdc624ebff57ec5c1835ce3b14f1ed923b102aabef110",
   "parts_quincy/arm_key.png": "f5d77b58c83c0371b9641cd3e8de6b2e7c7eaad70a70480abc273b9097fd73f1",
   "parts_quincy/arm_pen.png": "2e977ed2dc2021ebb4687170f986ae42421e0f1331e376424a6a07d117a0b8ad",
   "parts_quincy/arm_right.png": "722b0e4b26746cc768657d9fb874bce6904de23f9b73dd218b21811a6afe4384",
@@ -531,6 +531,12 @@
   "parts_quincy/stamps/sprout.png": "7fc5debfff894594c7ff5d2905de9ede3182d3f36365d5cfb24ab77f2c815036",
   "parts_quincy/words/kkodle.json": "cec16ab9934b2532339e4928c71b3467b03ef57601c6fc7fef8b4174c07d7b63"
  },
- "notes": [],
- "silent": true
+ "notes": [
+  "뽀모도로 창 ✿ 메뉴에 '소리 조절' — 알림음마다 게이지로 크기를 맞추고 바로 들어볼 수 있어요 (기본은 더 크게)",
+  "플레이리스트에 정지(■) 단추 — 누르면 재생기가 꺼지고 타이머 위 재생 줄도 사라져요 (환경음이 켜져 있어도)",
+  "홈 '오늘 다 같이' 목표가 40시간이 됐어요",
+  "폼(변신)을 입었을 때 도구로 넣은 소품이 안 보이던 것을 고쳤어요",
+  "깅규·하독에 빠져 있던 왕관·고깔·시간대 하늘 그림을 채웠어요",
+  "전체 점검 — 쓰다듬기 손 그림이 없을 때 터지던 자리 등 숨은 오류를 고쳤어요"
+ ]
 }
